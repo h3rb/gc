@@ -1,0 +1,9 @@
+<?php load_gc();
+ $store=find("Store", "HC", auv("Store"));
+ if (is_null($store))$store=find("Store", "HC", auv("store"));
+ if (is_null($store)){
+  echo milford()."[[Store id]]: No Store Found!";
+  die;
+ }
+ echo $store['HC'];
+unload_gc(); ?>

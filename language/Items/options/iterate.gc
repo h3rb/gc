@@ -1,0 +1,12 @@
+require_once('/var/www/sites/GC/common/commercemenu.php');
+$product=find("Product", "HC", $_OBJ['r_Product']);
+$options=parseOptions($_OBJ['Options']);
+if ($options!=""){
+ foreach ($options as $optionG){
+  echo $optionG['group']['name'].': ';
+  foreach ($optionG['options'] as $option){
+   echo $option['name'].', ';
+  }
+  echo '<br />';
+ }
+}

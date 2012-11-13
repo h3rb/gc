@@ -1,0 +1,15 @@
+<?php load_gc();
+ $product=find("Product", "HC", auv("Product"));
+ if (is_null($product))$product=find("Product", "HC", auv("product"));
+ if (is_null($product)){
+  echo milford()."[[Product quantity]]: No Product Available!";
+  die;
+ }
+ if (isset($_VAR['select'])){
+  //quantity combo box goes here
+  echo '<span id="'.$_VAR['style'].'">'.$product['quantity'].'</span>';  
+ }
+ else{
+  echo '<span id="'.$_VAR['style'].'">'.$product['quantity'].'</span>';
+ }
+unload_gc(); ?>

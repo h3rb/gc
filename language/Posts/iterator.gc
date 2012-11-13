@@ -1,0 +1,14 @@
+<?php load_gc();
+ $topic=find("Topic","HC",auv('Topic'));
+ if ( is_null($topic) ) $topic=find("Topic","HC",auv('topic'));
+ if ( is_null($topic) ) {
+  echo milford().'[>posts<]: No topic found, is this a topic page>';
+ }
+ else {
+  $blog=find("Blog","HC",$topic['r_Blog']);
+  if ( $blog['r_Project'] != $project['HC'] ) {echo milford().'[>posts<]: no access to this topic<br>';die;}
+  $posts=find_like("Post","r_Topic",$topic['HC']);
+  if ( count($posts)<=0 ) { echo defaults(nq($_VAR['alt']),"No posts."); }
+  else echo iter("Posts",$_CODE,$posts,"Reply","r_Post");
+ }
+unload_gc(); ?>

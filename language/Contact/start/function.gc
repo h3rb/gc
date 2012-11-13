@@ -1,0 +1,1 @@
+<?php echo '<form method="post" action="http://www.gudagi.com/gc_input/contact.php">'; ?>

@@ -1,0 +1,52 @@
+<?php load_gc();
+ global $store;
+ echo '<form method="post" action="https://www.gudagi.com/gc_input/contact.php?ajax=1">';
+ input("contact_name","Your name...");
+ input("contact_email","Your email...");
+ input("contact_subject","Subject...");
+ textarea("contact_comments","Contact us here and we'll do our best!");
+
+ $q="https://www.gudagi.com/gc_input/contact.php?ajax=1";
+ $content="Send";
+ $content=nq($_VAR['content']);
+ if ( strlen($content)<=0 ) $content="Send";
+ if ( isset($_VAR['link']) && isset($_VAR['target']) ) {
+  echo milford().'[[contact]]: You only need either the <i>link</i> or the <i>target</i> attribute, not both.'; die;
+ }
+ if ( isset($_VAR['link']) && isset($_VAR['result']) ) {
+  echo milford().'[[contact]]: You only need either the <i>link</i> or the <i>result</i> attribute, not both.'; die;
+ }
+ if ( isset($_VAR['link']) ) {
+  $link=defaults(comdom(nq($_VAR['link'])),$domain.$path);
+  $unknown=defaults(comdom(nq($_VAR['unknown'])),$domain.$path);
+  $fail=defaults(comdom(nq($_VAR['fail'])),$domain.$path);
+  $call=makejax(st('pass',$link,'unknown',$unknown,'fail',$fail),$q);
+  if ( !hasjax($link) ) hide("target",$link);
+  href("contact",$call,$content);
+ } else
+ if ( isset($_VAR['target']) ) {
+  $target=defaults(comdom(nq($_VAR['target'])),$domain.$path);
+  $unknown=defaults(comdom(nq($_VAR['unknown'])),$domain.$path);
+  $fail=defaults(comdom(nq($_VAR['fail'])),$domain.$path);
+  $call=makejax(st('pass',$target,'unknown',$unknown,'fail',$fail),$q);
+  if ( !hasjax($target) ) hide("target",$target);
+  button("contact",$call,$content);
+ } else
+ if ( isset($_VAR['result']) ) {
+  $target=defaults(comdom(nq($_VAR['result'])),$domain.$path);
+  $unknown=defaults(comdom(nq($_VAR['unknown'])),$domain.$path);
+  $fail=defaults(comdom(nq($_VAR['fail'])),$domain.$path);
+  $call=makejax(st('pass',$target,'unknown',$target,'fail',$target),$q);
+  if ( !hasjax($target) ) hide("target",$target);
+  button("contact",$call,$content);
+ } else {
+  $link=defaults(comdom(nq($_VAR['link'])),$domain.$path);
+  $unknown=defaults(comdom(nq($_VAR['unknown'])),$domain.$path);
+  $fail=defaults(comdom(nq($_VAR['fail'])),$domain.$path);
+  $call=makejax(st('pass',$link,'unknown',$unknown,'fail',$fail),$q);
+  if ( !hasjax($link) ) hide("target",$link);
+  href("contact",$call,$content);
+ }
+ hide("recipient",$store['r_Owner']);
+ echo '</form>';
+unload_gc(); ?>

@@ -1,0 +1,22 @@
+<?php load_gc();
+  if (isset($_VAR['id'])){
+  $store=find("Store", "HC", $_VAR['id']);
+  if (!is_null($store)){
+   $link=defaults(comdom($_VAR['loc'],false),$domain.$path);
+   $link=jax($link,"&store=".$_VAR['id']);
+   echo '<a href="'.$link.'">'.$store['name'].'</a>';
+  }
+  else {
+   echo milford()."[[Store link]]: No Store Found!";
+   die;
+  }
+ }
+ else{$store=find("Store", "HC", auv("Store"));
+  if (is_null($store)) $store=find("Store", "HC", auv("store"));
+  if (is_null($store)){
+   echo milford()."[[Store name]]: No Store Found!";
+   die;
+  }
+  echo $store['name'];
+ }
+unload_gc(); ?>

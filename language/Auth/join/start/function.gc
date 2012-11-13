@@ -1,0 +1,3 @@
+<?php load_gc();
+ echo '<form method="post" action="https://www.gudagi.com/register.php?update=0">';
+unload_gc(); ?>

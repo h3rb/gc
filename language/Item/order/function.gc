@@ -1,0 +1,16 @@
+<?php load_gc();
+ $item=find("order_Product", "HC", auv("Item"));
+ if (is_null($item))$item=find("order_Product", "HC", auv("item"));
+ if (is_null($item)){
+  echo milford()."[[Item id]]: No Product Found!";
+  die;
+ }
+ if (isset($_VAR['link'])){
+  $link=defaults(comdom($_VAR['link'],false),$domain.$path);
+  $link=jax($link,"&order=".$item['r_Order']);
+  echo '<a href="'.$link.'">'.$item['r_Order'].'</a>';
+ }
+ else{
+  echo $item['r_Order'];
+ }
+unload_gc(); ?>

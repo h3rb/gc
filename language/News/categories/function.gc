@@ -1,0 +1,7 @@
+<?php load_gc();
+ $prefix="http://api.feedzilla.com/v1/";
+ $categories=json_decode($json=file_get_contents( $prefix.'categories.json' ));
+ $pre=defaults(nq($_VAR['pre']),"");
+ $post=defaults(nq($_VAR['post']),"<br>");
+ foreach ( $categories as $category ) echo $pre.$category->display_category_name.$post;
+unload_gc() ?>

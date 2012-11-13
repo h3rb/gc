@@ -1,0 +1,21 @@
+<?php load_gc();
+ $q="https://www.gudagi.com/gc_input/register.php?";
+ if (isset($_VAR['update'])){
+  $q.="update=".$_VAR['update'];
+ }
+else $q.="update=0";
+if (isset($_VAR['link'])){
+ $result=defaults(comdom(nq($_VAR['link'])), $domain.$path);
+ $unknown=defaults(comdom(nq($_VAR['unknown'])), $domain.$path);
+ $fail=defaults(comdom(nq($_VAR['fail'])), $domain.$path);
+ $call=makejax(st('pass', $result, 'fail', $fail, 'unknown', $unknown), $q);
+ href("join_submit", $call, "Submit");
+}
+else if (isset($_VAR['button'])){
+ $result=defaults(comdom(nq($_VAR['button'])), $domain.$path);
+ $unknown=defaults(comdom(nq($_VAR['unknown'])), $domain.$path);
+ $fail=defaults(comdom(nq($_VAR['fail'])), $domain.$path);
+ $call=makejax(st('pass', $result, 'fail', $fail, 'unknown', $unknown), $q);
+ button("join_submit", $call, "Submit");
+}
+unload_gc(); ?>

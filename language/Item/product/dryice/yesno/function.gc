@@ -1,0 +1,14 @@
+<?php load_gc();
+ $product=find("Product", "HC", auv("Product"));
+ if (is_null($product))$product=find("Product", "HC", auv("product"));
+ if (is_null($product)){
+  echo milford()."[[Product name]]: No Product Found!";
+  die;
+ }
+ if (flag($product['flags'], PRODUCT_DRYICE)){
+  echo "YES";
+ }
+ else{
+  echo "NO";
+ }
+unload_gc(); ?>

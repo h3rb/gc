@@ -1,0 +1,12 @@
+<?php load_gc();
+ require_once("/var/www/sites/GC/common/commercemenu.php");
+ $order=find("Orders", "HC", auv("Order"));
+ if (is_null($order))$order=find("Orders", "HC", auv("order"));
+ if (is_null($order)){
+  echo milford()."[[Order count]]: No Product Found!";
+  die;
+ }
+ $prod=getProducts($order['HC']);
+ $count=count($prod);
+ echo $count;
+unload_gc(); ?>

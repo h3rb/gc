@@ -1,0 +1,35 @@
+<?php load_gc();
+echo '<head><link rel="stylesheet" href="http://www.gudagi.com/css/jquery.jgrowl.css" />
+      <link rel="stylesheet" href="http://www.gudagi.com/css/jquery.jgrowl.gudagi.css" />
+        <script type="text/javascript" src="http://www.gudagi.com/js/jquery.jgrowl.js"></script>
+        <script type="text/javascript" src="http://www.gudagi.com/js/jquery.ui.all.js"></script>
+        ';
+
+  $notifications=find_like('notifications', 'r_Contact', $user['HC']);
+  echo '<script type="text/javascript"> (function($){';
+  echo '$(document).ready(function(){';
+	 if (!is_null($notifications)){  
+	  foreach ($notifications as $notification){
+    	if (flag($notification['flags'], NOTIFICATION_VIEWED)) continue; 
+    	$descrip=str_replace("\"", "\\\"", $notification['description']);
+    	$descrip=str_replace("\'", "\\\'", $descrip);
+   	 $title=str_replace("\"", "\\\"", $notification['name']);
+   	 $title=str_replace("\'", "\\\'", $title);
+   	 echo '$.jGrowl("'.$descrip.'", { 
+                	sticky: true, 
+                	header: "'.$title.'", 
+                	theme: "'.$notification['style'].'",
+                	close: function(e,m,o){ 
+                	        $.ajax({
+                	                type: "GET",
+                	                url: "./notification_ajax.php",
+                	                data: "notificationCode="+"'.$notification['HC'].'"+"&action=viewed",
+               		         });
+                        	return true;
+                	} 
+        	});';
+  	}
+  }
+  echo '});';
+  echo '})(jQuery);</script></head>';
+unload_gc(); ?>

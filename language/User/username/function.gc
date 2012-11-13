@@ -1,0 +1,4 @@
+<?php load_gc();
+ is_logged_in();
+ if (!is_null($user)) {$auth=find("auth", "r_Contact", $user['HC']); echo $auth['username'];}
+unload_gc(); ?>

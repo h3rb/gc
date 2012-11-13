@@ -1,0 +1,3 @@
+<?php load_gc();
+ input("line1");
+unload_gc(); ?>

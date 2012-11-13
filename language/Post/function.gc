@@ -1,0 +1,12 @@
+<?php load_gc();
+ $post=find("Post","HC",auv('Post'));
+ if ( is_null($post) ) {
+  echo '';
+ }
+ else 
+ if ( isset($_VAR['date']) ) {
+  echo date( nq($_VAR['date']), strtotime($post['start_date']) );
+ } else {
+ }
+unload_gc(); ?>
+

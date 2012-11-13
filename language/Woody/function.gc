@@ -1,0 +1,22 @@
+<?php
+ echo 'before load_gc():<br>';
+ echo '<pre>';
+ echo 'var='; var_dump($_VAR);
+ echo 'owner='; var_dump($owner);
+ echo 'username='; var_dump($username);
+ echo 'user='; var_dump($user);
+ echo 'store='; var_dump($store);
+ echo 'project='; var_dump($project);
+ echo '</pre>';
+ echo '<hr>after:<br>';
+ load_gc();
+ echo '<pre>';
+ echo 'var='; var_dump($_VAR);
+ echo 'owner='; var_dump($owner);
+ echo 'username='; var_dump($username);
+ echo 'user='; var_dump($user);
+ echo 'store='; var_dump($store);
+ echo 'project='; var_dump($project);
+ echo '</pre>';
+ unload_gc();
+?>

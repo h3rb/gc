@@ -1,0 +1,25 @@
+<?php load_gc();
+ $cart=find("Cart", "HC", auv("cart"));
+ if (is_null($cart))$cart=find("Cart", "HC", auv("cart"));
+ if (is_null($store)){
+  echo milford()."[[Cart options]]: No Cart Found!";
+  die;
+ }
+ if (isset($_VAR['weight'])){
+  $weight=$_VAR['weight'];
+ }
+ if (isset($_VAR['height'])){
+  $height=$_VAR['height'];
+ }
+ if (isset($_VAR['result'])){
+  
+ }
+ if (isset($_VAR['link'])){
+
+ }
+ else if (isset($_VAR['link'])&&isset($_VAR['image']){
+  
+ }
+ 
+ 
+unload_gc(); ?>

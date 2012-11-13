@@ -1,0 +1,4 @@
+<?php load_gc();
+ is_logged_in();
+ if (!is_null($user)) echo $user['last_name'];
+unload_gc(); ?>

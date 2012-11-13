@@ -1,0 +1,10 @@
+<?php load_gc();
+ $cart=find("Cart", "r_Customer", $user['HC']);
+ if (is_null($cart)) $cart=find("Cart", "r_Customer", auv("User"));
+ if (is_null($cart)) $cart=find("Cart", "r_Customer", auv("user"));
+ if (is_null($cart)){
+  echo milford()."[[Cart id]]: No items in cart!";
+  die;
+ }
+ echo $cart['HC'];
+unload_gc(); ?>

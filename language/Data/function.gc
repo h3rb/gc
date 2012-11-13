@@ -1,0 +1,116 @@
+<?php load_gc();
+global $data_index;
+global $data;
+global $db_prefix;
+$failed=false;
+$decrypt=isset(nq($_VAR['decrypt']))?true:false; // special salting database needed (implement!)
+$encrypt=isset(nq($_VAR['encrypt']))?true:false; // special salting database needed (implement!)
+$persist=isset(nq($_VAR['persist']))?true:false; // see note.txt
+$memory=isset(nq($_VAR['memory']))?true:false;   // saves in a different 'temporary' db
+$readonly=isset(nq($_VAR['readonly']))?true:false; // forbids use of save/put/persist calls
+$postfix=defaults(strtolower(nq($_VAR['table'])),"Stored");
+$old_db_prefix=$db_prefix;
+if ( $memory === true ) $db_prefix="/instances/".$project['HC'].'/'; else $db_prefix="/sqlite/userdbs/".$project['HC']."/";
+if ( !file_exists($db_prefix) ) mkdir( $dbprefix, 0655 );
+if ( !file_exists($db_prefix.$postfix) ) {
+ try { $db = new PDO("sqlite:$db_prefix$postfix.db" ); } catch ( PDOException $e ) { $failed=$e->getMessage(); }
+}
+if ( $failed === false ) {
+ if ( isset($_VAR['get']) || isset($_VAR['load']) ) {
+  if ( !isset($data_index) ) $data_index=0;
+  else $data_index++;
+  $data[$data_index]=
+   Establish( $postfix, $project['HC'],
+     isset($_VAR['load']) ? defaults(strtolower(nq($_VAR['load'])),"Data")
+                          : defaults(strtolower(nq($_VAR['get'])), "Data"),
+     isset($_VAR['load']) ? true : false,
+     isset($_VAR['decrypt']) ? nq($_VAR['decrypt']) : false
+   );
+ } else
+ if ( isset($_VAR['put']) ) {
+  $target=false;
+  foreach ( $data as $element )
+   if ( is($element['_class_name'],
+        defaults(strtolower(nq($_VAR['put'])),"Data")) ) $target=$element;
+  if ( $target !== false )
+   Reestablish( $postfix, $project['HC'], $element['_class_name'], $element );
+ }
+ else
+ if ( isset($_VAR['save']) ) {
+  $target=false;
+  $v=$class =trim(nq($_VAR['save']));
+  foreach ( $data as $element )
+   if ( isset($element['_class_name']) && trim($element['_class_name'])==$class ) $target=$element;
+  if ( $target !== false ) {
+   global $data_saves;
+   if ( !isset($data_saves) ) $data_saves=1;
+   else $data_saves++;
+   if ( $data_saves > 1 ) echo '<script src="http://www.gudagi.com/sites/GC/common/js/base64.js" type="text/javasc$
+   if ( isset($_VAR['inline']) ) echo '<script type="text/javascript">';
+   else echo ( !isset($_VAR['clean']) ? 'javascript: {' : '{';
+   echo 'function store_'.$postfix.$data_index'() {';
+   echo ' var temp="", total=0,i;
+          var names;
+   for in ( data_'.$element['_class_name'].' as k) keys[total++]=base64.encode(k);
+   i=0;
+   for each ( data_'.$element['_class_name'].' as v) values[i++]=base64.encode(v);
+   for ( i=0; i<total; i++ ) temp+=keys[i]+"--base64--"+values[i];
+';
+
+ global $ax; $ax++;
+ $call="aj$ax($ax,this)";
+ $name="aj$ax(id,us)";
+ $p="";
+ if ( isset($_VAR['encrypt']) ) $p="&encrypt=".nq($_VAR['encrypt']);
+?>
+function pstates<?php echo $ax; ?>() {
+ var t=document.getElementsByTagName("textarea");
+ var i=document.getElementsByTagName("input");
+ var s=document.getElementsByTagName("select");
+ var x,o="aj=ax";
+ for ( x=0; x<t.length; x++ ) o+="&"+t[0].name+"="+escape(t[0].value);
+ for ( x=0; x<i.length; x++ ) o+="&"+i[0].name+"="+escape(i[0].value);
+ for ( x=0; x<s.length; x++ ) o+="&"+s[0].name+"="+escape(s[0].value);
+ return o;
+}
+function <?php echo $name; ?> {
+<?php if ( hasjax($v) ) {
+ foreach ( $v as $t=>$i ) { $ay++; ?>
+  var http<?php echo $ay; ?>=false;
+  if(typeof ActiveXObject != 'undefined'){try{http<?php echo $ay; ?>=new ActiveXObject("Msxml2.XMLHTTP");}catch(e){try {http<?php echo $ay; ?> = new ActiveXObject("Microsoft.XMLHTTP");}catch(E){http<?php echo $ay; ?> = false;}}}else if(XMLHttpRequest){try{http<?php echo $ay; ?>=new XMLHttpRequest();}catch(e){http<?php echo $ay; ?>=false;}}
+  var p<?php echo $ay; ?>=pstates<?php echo $ax; ?>()+"<?php echo $p; ?>"+temp;
+  http<?php echo $ay; ?>.open("POST", "<?php echo $t; ?>", true);
+  http<?php echo $ay; ?>.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+  http<?php echo $ay; ?>.setRequestHeader("Content-length", p<?php echo $ay; ?>.length); 
+  http<?php echo $ay; ?>.setRequestHeader("Connection", "close");
+  http<?php echo $ay; ?>.onreadystatechange = function() {
+   if(http<?php echo $ay; ?>.readyState == 4 && http<?php echo $ay; ?>.status == 200) {
+    document.getElementById("<?php echo $i ?>").innerHTML=http<?php echo $ay; ?>.responseText;
+   }
+  }
+  http<?php echo $ay; ?>.send(p<?php echo $ay; ?>);
+<?php }
+} else { ?>
+ var f = document.createElement("form");
+ f.setAttribute("method", "POST");
+ f.setAttribute("action", "<?php echo $v; ?>");
+ var p=pstates<?php echo $ax; ?>()+"<?php echo $p; ?>";
+ p=p.split("&");
+ for(var key in p) {
+  var k=p[key].split("=");
+  var h = document.createElement("input");
+  h.setAttribute("type", "hidden"); h.setAttribute("name", k[0]);
+  h.setAttribute("value", k[1]); f.appendChild(h);
+ }
+ document.body.appendChild(f); f.submit();
+<?php } ?>
+}
+<?php
+  echo $call;
+  echo ' } store_'.$postfix.$data_index .'=0; delete store_'.$postfix.$data_index .';';
+  if ( isset($_VAR['inline']) ) echo '</script>';
+  else echo '}';
+ }
+} else { echo milford()."[[data]]: Could not create storage, please contact support with a description of this situation along with this error message: ".$failed; die; }
+$db_prefix=$old_db_prefix;
+unload_gc() ?>

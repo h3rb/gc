@@ -1,0 +1,3 @@
+<?php load_gc();
+ echo '<input type="radio" name="contact_type" value="notification" style="'.$_VAR['style'].'" class="'.$_VAR['class'].'" />;'
+unload_gc(); ?>

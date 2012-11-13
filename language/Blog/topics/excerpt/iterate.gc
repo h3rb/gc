@@ -1,0 +1,12 @@
+$post=find("Post","r_Topic",$_OBJ['HC']," ORDER BY post_date");
+if ( is_null($post) ) die;
+$words=intval($_VAR['words']);
+if ( $words <=0 ) $words=30;
+$split=explode(" ",$excerpt); $excerpt="";
+for ( $i=0; $i<$words; $i++ ) $excerpt.=$split[$i];
+$excerpt=" ... ";
+if ( isset($_VAR['link']) ) {
+ $link=defaults(comdom($_VAR['link']),$domain.$path);
+ echo '<a style="'.$_VAR['style'].'" href="javascript:'.$link.'">'.$excerpt.'</a>'; 
+}
+else echo $excerpt;

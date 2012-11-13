@@ -1,0 +1,14 @@
+<?php load_gc();
+// var_dump($_VAR);
+ $blog=find("Blog","HC",auv('blog'));
+ if ( is_null($blog) ) find("Blog","HC",auv('Blog'));
+ if ( is_null($blog) ) {
+  echo milford().'[>blog topics<]: no blog found'; die;
+ }
+ if ( $blog['r_Owner'] != $owner['HC'] ) {
+  echo milford().'[>blog topics<]: You do not have permission to access this blog.'; die;
+ } else {
+  $topics=find_like("Topic","r_Blog",$blog['HC']);
+  echo iter("Blog/topics",$_CODE,$topics,"Post","r_Topic");
+ }
+unload_gc(); ?>

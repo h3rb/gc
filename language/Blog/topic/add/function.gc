@@ -1,0 +1,25 @@
+<?php load_gc();
+ $blog=find("Blog","HC",auv("Blog"));
+ if ( is_null($blog) ) $blog=find("Blog","HC",auv("blog"));
+ if ( is_null($blog) ) { echo milford()."[[blog topic add]]: no blog found"; die; }
+ if ( $blog['r_Project'] != $project['HC'] ) { echo milford()."[[blog topic add]]: no access to this blog"; die; }
+ $text=nq($_VAR['text']);
+ if ( strlen($text) <=0 ) $text = "New Topic";
+ echo defaults(nq($_VAR['name']),"Name: ").'<input type="text" name="topic_name" id="topic_name" size="'.defaults(nq($_VAR['size']),30).'" placeholder="'.nq($_VAR['placeholder']).'" class="'.nq($_VAR['class']).'" value="'.nq($_VAR['value']).'" style="'.nq($_VAR['style']).'"><br>';
+ echo defaults(nq($_VAR['description']),"Description: ").'<textarea type="text" name="topic_description" id="topic_description" rows="'.defaults(nq($_VAR['rows']),4).'" cols="'.defaults(nq($_VAR['cols']),40).'" placeholder="'.nq($_VAR['placeholder']).'" class="'.nq($_VAR['class']).'" value="'.nq($_VAR['value']).'" style="'.nq($_VAR['style']).'"></textarea>';
+ if ( isset($_VAR['button']) || isset($_VAR['link']) ) {
+  if ( isset($_VAR['button']) ) {
+   $result=defaults(comdom($_VAR['button']), $domain.$path);
+   $call=makejax($result,"http://www.gudagi.com/gc_input/topic.php","Blog=".$blog['HC']);
+   echo '<input type="button" name="reply" id="reply" value="'.$text.'" style="'.nq($_VAR['style']).'" class="'.nq($_VAR['class']).'" onmousedown="'.$call.'">';
+  } else {
+   $link=defaults(comdom($_VAR['link']), $domain.$path);
+   $call=makejax($link,"http://www.gudagi.com/gc_input/topic.php","Blog=".$blog['HC']);
+   echo '<a href="javascript:'.$call.'">'.$text.'</a>';
+  }
+ } else {
+  $result=defaults(comdom($_VAR['button']), $domain.$path);
+  $call=makejax($result,"http://www.gudagi.com/gc_input/topic.php","Blog=".$blog['HC']);
+  echo '<input type="button" name="reply" id="reply" value="'.$text.'" style="'.nq($_VAR['style']).'" class="'.nq($_VAR['class']).'" onmousedown="'.$call.'">';
+ }
+unload_gc(); ?>

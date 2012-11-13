@@ -1,0 +1,9 @@
+<?php load_gc();
+  $customer=find("Contact", "HC", auv("Customer"));
+  if (is_null($customer)) $customer=find("Contact", "HC", auv("customer"));
+  if (is_null($customer)){
+	echo milford()."[[Customer]] not found!";
+  }
+  echo $customer['HC'];
+
+unload_gc(); ?>

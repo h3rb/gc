@@ -1,0 +1,7 @@
+<?php load_gc();
+ echo '<input type="text" id="username" name="username" title="Login" value="'.auv('value').'" ';
+ if ( isset($_VAR['style']) ) echo 'style="'.nq($_VAR['style']).'" ';
+ if ( isset($_VAR['placeholder']) ) echo 'placeholder="'.nq($_VAR['placeholder']).'" ';
+ if ( isset($_VAR['class']) ) echo 'class="'.nq($_VAR['class']).'" ';
+ echo '>';
+unload_gc(); ?>

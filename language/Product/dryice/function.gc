@@ -1,0 +1,23 @@
+<?php load_gc();
+ $product=find("Product", "HC", auv("Product"));
+ if (is_null($product))$product=find("Product", "HC", auv("product"));
+ if (is_null($product)&&isset($_VAR['id']))$product=find("Product", "HC", $_VAR['id']);
+ if (is_null($product)){
+  echo milford()."[[Product name]]: No Product Found!";
+  die;
+ }
+ if (isset($_VAR['yesno'])){
+  if (flag($product['flags'], PRODUCT_DRYICE)){
+   echo "YES";
+  }
+  else{
+   echo "NO";
+  }
+ }
+ else{
+  $temp=flag($product['flags'], PRODUCT_DRYICE);
+  if ($temp==true){
+   echo "This product is perishable and is shipped in dry ice";
+  }
+ } 
+unload_gc(); ?>

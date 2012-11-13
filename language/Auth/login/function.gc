@@ -1,0 +1,67 @@
+<?php load_gc();
+ $u=check_cookie();
+ if ( $expired==true || is_null($u) ) {
+  echo '<form id="login" action="https://www.gudagi.com/gc_input/login.php">'; 
+  echo defaults(nq($_VAR['login-text']),'Login: ').
+   tag( array("input"=>"input",
+    "type"=>"text",
+    "id"=>"username",
+    "name"=>"username",
+    "title"=>"Login",
+    "value"=>auv('username'),
+    "style"=>nq($_VAR['style']),
+    "class"=>nq($_VAR['class']),
+    "placeholder"=>nq($_VAR['placeholder'])
+    ),
+    false );
+  if ( isset($_VAR['between']) ) echo nq($_VAR['between']);
+  echo defaults(nq($_VAR['password-text']),'Password: ').
+   tag( array("input"=>"input",
+    "type"=>"password",
+    "id"=>"password",
+    "name"=>"password",
+    "title"=>"Password",
+    "value"=>auv('password'),
+    "style"=>nq($_VAR['style']),
+    "class"=>nq($_VAR['class']),
+    "placeholder"=>nq($_VAR['placeholder'])
+    ),
+    false );
+  $q="https://www.gudagi.com/gc_input/login.php?ajax=1";
+  $content="Log In";
+  //$content=nq($_VAR['content']);
+  if ( strlen($content)<=0 ) $content="Log in";
+  if ( isset($_VAR['link']) && isset($_VAR['target']) ) {
+   echo milford().'[[auth login]]: You only need either the <i>link</i> or the <i>target</i> attribute, not both.'; die;
+  }
+  if ( isset($_VAR['link']) ) {
+   $link=defaults(comdom(nq($_VAR['link'])),$domain.$path);
+   $unknown=defaults(comdom(nq($_VAR['unknown'])),$domain.$path);
+   $fail=defaults(comdom(nq($_VAR['fail'])),$domain.$path);
+   $call=makejax(st('pass',$link,'unknown',$unknown,'fail',$fail),$q);
+   if ( !hasjax($link) ) hide("target",$link);
+   href("auth",$call,$content);
+  } else
+  if ( isset($_VAR['target']) ) {
+   $target=defaults(comdom(nq($_VAR['target'])),$domain.$path);
+   $unknown=defaults(comdom(nq($_VAR['unknown'])),$domain.$path);
+   $fail=defaults(comdom(nq($_VAR['fail'])),$domain.$path);
+   $call=makejax(st('pass',$target,'unknown',$unknown,'fail',$fail),$q);
+   if ( !hasjax($target) ) hide("target",$target);
+   button("auth",$call,$content);
+  } else {
+   $link=defaults(comdom(nq($_VAR['link'])),$domain.$path);
+   $unknown=defaults(comdom(nq($_VAR['unknown'])),$domain.$path);
+   $fail=defaults(comdom(nq($_VAR['fail'])),$domain.$path);
+   $call=makejax(st('pass',$link,'unknown',$unknown,'fail',$fail),$q);
+   if ( !hasjax($link) ) hide("target",$link);
+   href("auth",$call,$content);
+  }
+  hide("last",$domain.$path);
+  echo '</form>';
+ } else {
+  $content=nq($_VAR['authenticated']);
+  if ( strlen($content)==0 ) $content=nq($_VAR['logged']);
+  if ( strlen($content)>0 ) echo $content;
+ }
+unload_gc(); ?>

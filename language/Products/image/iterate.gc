@@ -1,0 +1,1 @@
+if (!flag($_OBJ['flags'], PRODUCT_STOP)) echo '<img src="'.$_OBJ['images'].'" width="'.$_VAR['width'].'" height="'.$_VAR['height'].'" />';

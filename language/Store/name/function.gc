@@ -1,0 +1,15 @@
+<?php load_gc();
+ global $store;
+ if (is_null($store))$store=find("Store", "HC", auv("Store"));
+ if (is_null($store))$store=find("Store", "HC", auv("store"));
+ if (is_null($store)){
+  if (isset($_VAR['id'])){
+   $store=find("Store", "HC", $_VAR['id']);
+  }
+ }
+ if (is_null($store)){
+  echo milford()."[[Store name]]: No Store Found!";
+  die;
+ }
+ echo $store['name'];
+unload_gc(); ?>

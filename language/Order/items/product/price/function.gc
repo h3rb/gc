@@ -1,0 +1,28 @@
+<?php load_gc();
+ $item=find("order_Product", "HC", auv("Item"));
+ if (is_null($item))$item=find("order_Product", "HC", auv("item"));
+ if (is_null($item)){
+  echo milford()."[[Item product price]]: No item found!";
+  die;
+ }
+ $product=find("Product", "HC", $item['r_Product']);
+ if (is_null($product)){
+  echo milford()."[[Item product price]]: No Product Found!";
+  die;
+ }
+
+ if (isset($_VAR['currency'])){
+  if ($_VAR['currency']=="auto"){
+   setlocale(LC_MONETARY, "en_US");//should change according to ip detection.
+   echo money_format("%n", $product['price']); 
+  }
+  else{
+   setlocale(LC_MONETARY, $_VAR['currency']);
+   echo money_format("%n", $product['price']); 
+  }
+ }
+ else{
+  setlocale(LC_MONETARY, "en_US");
+ echo  money_format("%n", $product['price']);
+ }
+unload_gc(); ?>

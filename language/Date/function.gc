@@ -1,0 +1,5 @@
+<?php
+ $format = defaults(nq($_VAR['format']),'l, F d, Y');
+ $today = defaults(nq($_VAR['today']),'now');
+ echo date($format,strtotime($today));
+?>

@@ -1,0 +1,10 @@
+<?php load_gc();
+ $product=find("Product", "HC", auv("Product"));
+ if (is_null($product))$product=find("Product", "HC", auv("product"));
+ if (is_null($product)&&isset($_VAR['id']))$product=find("Product", "HC", $_VAR['id']);
+ if (is_null($product)){
+  echo milford()."[[Product tags]]: No Product Found!";
+  die;
+ }
+ echo '<span id="'.$product['HC'].'tags">'.$product['tags'].'</span>';
+unload_gc(); ?>

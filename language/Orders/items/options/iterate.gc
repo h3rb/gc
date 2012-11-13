@@ -1,0 +1,3 @@
+$product=find("Product", "HC", $_OBJ['r_Product']);
+getOrderProductOptions($_OBJ['HC']);
+

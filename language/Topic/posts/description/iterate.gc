@@ -1,0 +1,6 @@
+if ( isset($_VAR['link']) ) {
+ $link=defaults(comdom($_VAR['link'],false),$domain.$path);
+ $link=jax($link,"&order=".$_OBJ['HC']);
+ echo '<a href="'.$link.'">'.$_OBJ['HC'].'</a>';
+}
+else echo $_OBJ['number'];

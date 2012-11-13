@@ -1,0 +1,15 @@
+if (!flag($_OBJ['flags'], PRODUCT_STOP)) {
+	$groups=find_like("Product_option_group", "r_Product", $_OBJ['HC']);
+	if (!is_null($groups)){
+		foreach ($groups as $group){
+			$options=find_like("Product_options", "r_Product_option_group", $group['HC']);
+			if (!is_null($options)){
+				echo "<strong>".$group['name']."</strong> -- ".$group['description']."<br />";
+				foreach ($options as $option){
+					echo $option['name'].': $'.money_format("%n",$option['price']+$_OBJ['price'])."<br />";
+				}
+			}
+			echo "<br />";
+		}
+	}
+}

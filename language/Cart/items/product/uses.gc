@@ -1,0 +1,44 @@
+<?php
+/*
+ if ( !isset($Product) ) global $Product=NULL;
+ if ( isset($_VAR['Product']) ) { // uses Product(12498012);
+  $id=$_VAR['Product'];
+  $Product=find("Products","HC",$id);
+  if ( is_null($Product) ) {
+   echo 'Product('.$id.') not found.<br>';
+   echo 'No product was selected. Heading back to referring URL...';
+   redirect( $_SERVER['HTTP_REFERER'], 5000 ); die();
+  }
+ } else
+ if ( isset($_GET['Product']) ) {
+  $id=$_GET['Product'];
+  $Product=find("Products","HC",$id);
+  if ( is_null($Product) ) {
+   echo 'Product('.$id.') not found.<br>';
+   echo 'No product was selected. Heading back to referring URL...';
+   redirect( $_SERVER['HTTP_REFERER'], 5000 ); die();
+  }
+ } else
+ if ( isset($_POST['Product']) ) {
+  $id=$_POST['Product'];
+  $Product=find("Products","HC",$id);
+  if ( is_null($Product) ) {
+   echo 'Product('.$id.') not found.<br>';
+   echo 'No product was selected. Heading back to referring URL...';
+   redirect( $_SERVER['HTTP_REFERER'], 5000 ); die();
+  }
+ } else { // fallback
+  echo 'No product was selected. Heading back to referring URL...';
+  redirect( $_SERVER['HTTP_REFERER'], 5000 ); die();
+ }
+ if ( is_null( $Product_Store=find("Store",Product['r_Store'],$HC) ) ) {
+  echo 'Could not find a valid store for this product. ';
+  echo 'Heading back to referring URL...';
+  redirect( $_SERVER['HTTP_REFERER'], 5000 ); die();
+ }
+ if ( $Product_Store['r_Project'] != $HC ) {
+  echo 'This product is not in your store. Heading back to referring URL...';
+  redirect( $_SERVER['HTTP_REFERER'], 5000 ); die();
+ }
+*/
+?>

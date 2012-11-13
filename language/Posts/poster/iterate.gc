@@ -1,0 +1,15 @@
+$auth=find("Auth","r_Contact",$_OBJ['r_Poster']);
+$poster=find("Contact","HC",$OBJ['r_Poster']);
+if ( isset($_VAR['link']) ) {
+ $link=comdom($_VAR['link']);
+ $call=makejax($link);
+ echo '<a href="javascript:'.$call.'">';
+} 
+if ( isset($_VAR['last'])  ) echo $poster['last_name'];
+else
+if ( isset($_VAR['first']) ) echo $poster['first_name'];
+else echo $auth['username'];
+if ( isset($_VAR['link']) ) {
+ echo '</a>';
+}
+unset($auth);

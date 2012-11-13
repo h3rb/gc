@@ -1,0 +1,19 @@
+<?php load_gc();
+ require_once("/var/www/sites/GC/common/commercemenu.php");
+ $store=find("Store", "HC", auv("Store"));
+ if (is_null($store))$store=find("Store", "HC", auv("store"));
+ if (is_null($store))$store=find("Store", "HC", nq($_VAR['id']));
+ if (is_null($store))$store=find("Store", "HC", nq($uses['store']));
+ if (is_null($store)){
+  echo milford()."[[Store]]: No Store Found!";
+  die;	
+ }
+ $_VAR['store']=$_VAR['id'];
+ //add security here
+ //Widget that displays product in some default way or user configurable
+ if ($_VAR['display']=="yes")
+ {
+  displayCatalog($store['HC']);
+ }
+ unload_gc();
+?>

@@ -1,0 +1,11 @@
+<?php load_gc();
+ require_once("/var/www/sites/GC/common/commercemenu.php");
+ $cart=find("Cart", "r_Customer", auv("User"));
+ if (is_null($cart))$cart=find("Cart", "r_Customer", auv("user"));
+ if (is_null($cart))$cart=find("Cart", "r_Customer", $user['HC']); 
+if (is_null($cart)){
+//  echo milford()."[[Cart subtotal]]: No items in cart!";
+ }
+ $total=getShippingForOrder($cart['r_Order'], 15208);
+ echo money_format("\$%n", $total);
+unload_gc(); ?>

@@ -1,0 +1,209 @@
+<?php load_gc();
+ include_once '/var/www/sites/GC/common/apis/googlemaps3.php';
+ include_once '/var/www/sites/GC/common/apis/jsmin.php';
+ global $google_maps; $google_maps++;
+ if ( !isset($map) || !is_array($map) ) $map=array();
+ $map[$google_maps]=new GoogleMapAPI("map".$google_maps,defaults(nq($_VAR['yahooid']),"MyAppId"));
+ // Turn everything off
+ unset($map[$google_maps]->dsn); // <-turn off caching; turn on: $map[$google_maps]->setDSN("mysql://user:password@localhost/db_name");
+ $map[$google_maps]->disableMapControls();
+ $map[$google_maps]->disableLocalSearch();
+ $map[$google_maps]->disableLocalSearchAds();
+ $map[$google_maps]->disableWalkingDirections();
+ $map[$google_maps]->disableAvoidHighways();
+ $map[$google_maps]->disableAvoidTolls();
+ $map[$google_maps]->disableTypeControls();
+// $map[$google_maps]->disableOnload(); // remove this?
+ $map[$google_maps]->disableDirections();
+ $map[$google_maps]->disableTrafficOverlay();
+ $map[$google_maps]->disableBikingOverlay();
+ $map[$google_maps]->disableStreetViewControls();
+ $map[$google_maps]->disableAds(); // not supported
+ $map[$google_maps]->disableInfoWindow();
+ $map[$google_maps]->disableElevationMarker();
+ $map[$google_maps]->disableElevationDirections();
+ $map[$google_maps]->disableClustering();
+// $map[$google_maps]->disableZoomEncompass();
+// $map[$google_maps]->disableScaleControl();
+ $map[$google_maps]->disableOverviewControl();
+ // Poll for settings
+ $map[$google_maps]->_minify_js=is(nq($_VAR['minify']),"no")?TRUE:FALSE;
+ if(isset($_VAR['localsearch'])||is(nq($_VAR['localsearch']),"yes")) $map[$google_maps]->enableLocalSearch();
+ if(isset($_VAR['biking'])||is(nq($_VAR['biking']),"yes")) $map[$google_maps]->enableBikingDirections();
+ if(isset($_VAR['walking'])||is(nq($_VAR['walking']),"yes")) $map[$google_maps]->enableWalkingDirections();
+ if(isset($_VAR['notolls'])||is(nq($_VAR['notolls']),"yes")) $map[$google_maps]->enableAvoidTolls();
+ if(isset($_VAR['nohighways'])||is(nq($_VAR['nohighways']),"yes")) $map[$google_maps]->enableAvoidHighways();
+ if(isset($_VAR['streetview'])||is(nq($_VAR['streetview']),"yes")) $map[$google_maps]->enableStreetViewControls();
+ if(is(nq($_VAR['info']),"yes")) { $info_window=true; $map[$google_maps]->enableInfoWindow(); } else $info_window=false;
+ if(is(nq($_VAR['info']),"mouseover")) { $info_window=true; $map[$google_maps]->enableInfoWindow(); $map[$google_maps]->setInfoWindowTrigger("mouseover"); } else $info_window=false;
+ if(is(nq($_VAR['info']),"click"))     { $info_window=true; $map[$google_maps]->enableInfoWindow(); $map[$google_maps]->setInfoWindowTrigger("click"); } else $info_window=false;
+ if(isset($_VAR['elevationmarker'])||is(nq($_VAR['elevationmarker']),"yes")) $map[$google_maps]->enableElevationMarker();
+ if(is(nq($_VAR['clustering']),"yes")) $map[$google_maps]->enableClustering();
+ else if ( isset($_VAR['clustering']) ) {
+  $set=decomma(nq($_VAR['clustering']));
+  $map[$google_maps]->enableClustering();
+  $map[$google_maps]->setClusterOptions(defaults($set[0],"null"),defaults($set[1],"null"),defaults($set[2],"null"));
+ }
+ if(is(nq($_VAR['scale']),"no")) $map[$google_maps]->disableScaleControl();
+ if(isset($_VAR['overview'])||is(nq($_VAR['overview']),"yes")) $map[$google_maps]->enableOverviewControl();
+ if(is(nq($_VAR['zoomencompass']),"no")) $map[$google_maps]->disableZoomEncompass();
+ if(is(nq($_VAR['controls']),"yes")) $map[$google_maps]->enableMapControls();
+ if(is(nq($_VAR['controls']),"large")) { $map[$google_maps]->enableMapControls(); $map[$google_maps]->setControlSize("large"); }
+ if(is(nq($_VAR['controls']),"small")) { $map[$google_maps]->enableMapControls(); $map[$google_maps]->setControlSize("small"); }
+ if ( strlen($w=nq($_VAR['w']))==0 ) $w=nq($_VAR['width']);  $map[$google_maps]->setWidth(defaults($w,"100%"));
+ if ( strlen($h=nq($_VAR['h']))==0 ) $h=nq($_VAR['height']); $map[$google_maps]->setHeight(defaults($h,"100%"));
+ if ( strlen(nq($_VAR['center']))>0 ) {
+  $xy=decomma(nq($_VAR['center']));
+  $map[$google_maps]->setCenterCoords($xy[0],$xy[1]);
+ }
+ if ( strlen(nq($_VAR['adjust']))>0 ) {
+  $xy=decomma(nq($_VAR['adjust']));
+  $map[$google_maps]->adjustCenterCoords($xy[0],$xy[1]);
+ }
+ $map[$google_maps]->setLookupService(defaults(strtoupper(nq($_VAR['lookup'])),"GOOGLE"));
+ $map[$google_maps]->setBoundsFudge(defaults(floatval(trim(nq($_VAR['fudge']))),0.01));
+ $map[$google_maps]->setMapType(defaults(strtolower(nq($_VAR['type'])),"roadmap"));
+ $map[$google_maps]->setBrowserAlert(defaults(nq($_VAR['browser']),"Your browser does not support the maps on this page.  Try Chrome, Firefox, Opera or -ick- Internet Explorer."));
+ $map[$google_maps]->setJSAlert(defaults(nq($_VAR['js']),"Viewing the map on this page requires Javascript to be turned on."));
+ $attached_street_view=defaults(nq($_VAR['view']),"false");
+ if ( $attached_street_view !== "false" ) {
+  $map[$google_maps]->enableStreetViewControls();
+  $map[$google_maps]->attachStreetViewContainer($attached_street_view);
+ }
+ // Elevation and PolyLine features
+ if ( isset($_VAR['elevation'])||is(nq($_VAR['elevation']),"yes") ) {
+  echo $map[$google_maps]->enableElevationDirections();
+  $uses_elevation=true;
+ } else $uses_elevation=false;
+ if ( is(nq($_VAR['polyline_elevation']),"yes") ) {
+  $uses_polyline_elevation=true;
+ } else $uses_polyline_elevation=false;
+ if ( is_numeric(($z=nq($_VAR['zoom']))) ) $map[$google_maps]->setZoomLevel(intval($z));
+ // Custom Icons
+ if ( isset($_VAR['default_icon']) ) {
+  $default_icon=decomma(nq($_VAR['default_icon']));
+  $default_icon_key=$map[$google_maps]->setMarkerIcon($icon[0],
+    defaults($icon[1],""), defaults($icon[2],"x"), defaults($icon[3],"x"), defaults($icon[4],"x"), defaults($icon[5],"x") );
+ } else $default_icon_key=NULL;
+ $icons=nq($_VAR['icons']);
+ $icon_key=array();
+ if ( stripos($icons,"ajax:") !== FALSE ) {
+ } else {
+  $icons=depipe($icons);
+  foreach ( $icons as &$icon ) $icon=decomma($icon);
+  unset($icon);
+  $i=0;
+  foreach ( $icons as $icon ) {
+   $icon_key[$i]=$map[$google_maps]->addIcon( $icon[0],
+    defaults($icon[1],""), defaults($icon[2],"x"), defaults($icon[3],"x"), defaults($icon[4],"x"), defaults($icon[5],"x") );
+   $i=0;
+  }
+ }
+ // PolyLines
+ $polylines=nq($_VAR['polylines']);
+ if ( stripos($markers,"ajax:") !== FALSE ) {
+ } else {
+  $polylines=depipe($polylines);
+  foreach ( $polylines as &$polyline ) {
+   $polyline=decomma($polyline);
+   if ( inside($polyline[0],';') ) {
+    $polyline[0]=desemi($polyline[0]);
+    if ( inside($polyline[0][0],':') ) {
+     $test=decolon($polyline[0][0]);
+     if ( is_numeric($test[0]) ) {
+      foreach ( $polyline[0] as &$coordinate ) foreach ( $coordinate as &$coord ) $coord=decolon($coord);
+      unset($coordinate);
+      unset($coord);
+     } else {
+      foreach ( $polyline[0] as &$coordinate ) foreach ( $coordinate as &$coord ) $coord=str_replace(":",",",$coord);
+      unset($coordinate);
+      unset($coord);
+     }
+    }
+   }
+  }
+  unset($polyline);
+  foreach ( $polylines as $polyline ) {
+   if ( is_array($polyline[0]) ) {
+    if ( isset($polyline[0][0]) && is_numeric($polyline[0][0][0]) ) {
+     $map[$google_maps]->addPolyLineByCoordsArray($polyline[0],false,defaults($polyline[1],''),intval(defaults($polyline[2],0)),intval(defaults($polyline[3],0)) );
+    }
+    else {
+     $map[$google_maps]->addPolyLineByAddressArray($polyline[0],false,defaults($polyline[1],''),intval(defaults($polyline[2],0)),intval(defaults($polyline[3],0)) );
+    }
+   } else
+   if ( is_numeric($polyline[0]) && is_numeric($polyline[1]) && is_numeric($polyline[2]) && is_numeric($polyline[3]) )
+   $map[$google_maps]->addPolyLineByCoords($polyline[0],$polyline[1],$polyline[2],$polyline[3],false,defaults($polyline[4],""),intval(defaults($polyline[5],0)),intval(defaults($polyline[6],0)));
+   else
+   $map[$google_maps]->addPolyLineByAddress($polyline[0],$polyline[1],false,defaults($polyline[3],""),intval(defaults($polyline[4],0)),intval(defaults($polyline[5],0)) );
+  }
+ }
+ // Directions, Elevations, PolyLine Elevations
+ $directions=nq($_VAR['directions']);
+ $direction_divs=array();
+ if ( stripos($markers,"ajax:") !== FALSE ) {
+ } else {
+  $directions=depipe($directions);
+  if ( count($directions)>0 ) $map[$google_maps]->enableDirections();
+  foreach ( $directions as &$direction ) $direction=desemi($direction);
+  unset($direction);
+  $i=0;
+  foreach ( $directions as $direction ) {
+   $direction_divs[]="directionid".$google_maps.'_'.$i;
+   $map[$google_maps]->addDirections(defaults($direction[0],''),defaults($direction[1],''),defaults($direction[2],''),"directionid".$i, true, intval(defaults($direction[3],256)),defaults($direction[4],''), defaults($direction[5],''),defaults($direction[6], ''));
+   if ( $uses_polyline_elevation )
+    $map[$google_maps]->addPolylineElevation(
+     $map[$google_maps]->addPolyLineByAddress($direction[0],$direction[1],
+                          false,defaults($direction[3],'red'),defaults($direction[4],2),
+     "elepolydirectionid".$google_maps.'_'.$i) );
+   $i++;
+  }
+ }
+ // Markers
+ $markers=nq($_VAR['markers']);
+ if ( stripos($markers,"ajax:") !== FALSE ) { // use ajax to get the marker list
+ } else {
+  $markers=depipe($markers);
+  if ( count($markers) == 0 ) $map[$google_maps]->addMarkerByAddress("Pittsburgh, PA", "Home of Ganos LLC; You need to set markers=\"some address\" in your Google Maps GC code!");
+  else {
+   if ( count($markers) > 0 && $uses_elevation === true ) $map[$google_maps]->enableElevationMarker();
+   foreach ( $markers as &$marker ) $marker=desemi($marker);
+   unset($marker);
+   foreach ( $markers as $marker ) {
+    if ( is_numeric($marker[0]) && is_numeric($marker[1]) )
+    $map[$google_maps]->addMarkerByCoords($marker[0], $marker[1], $marker[2], $marker[3], $marker[4], $marker[5], $icon[intval($marker[6])], defaults($marker[7],"") );
+    else
+    $map[$google_maps]->addMarkerByAddress($marker[0], $marker[1], $marker[2], $marker[3], $marker[4], $icon[intval($marker[5])], defaults($marker[6],"") );
+   }
+  }
+ }
+ // Overlays
+ $overlays=nq($_VAR['overlays']);
+ if ( stripos($overlays,"ajax:") !== FALSE ) {
+ } else {
+  $overlays=depipe($overlays);
+  foreach ( $overlays as &$overlay ) $overlay=decomma($overlay);
+  unset($overlay);
+  foreach ( $overlays as $overlay )
+   $map[$google_maps]->addOverlay( $overlay[0], $overlay[1], $overlay[2], $overlay[3], $overlay[4], intval($overlay[5]) );
+ }
+ // Render on Page
+ if ( $google_maps <= 1 ) echo $map[$google_maps]->getHeaderJS();
+ echo $map[$google_maps]->getMapJS();
+ aol($map[$google_maps]->printOnLoadFunction()."();");
+ echo $map[$google_maps]->printMap();
+ if ( is(nq($_VAR['sidebar']),"yes") ) echo $map[$google_maps]->printSidebar();
+ if ( !is(nq($_VAR['manualdivs']),"yes") ) {
+  foreach ( $direction_divs as $div ) {
+   echo '<div id="' . $div . '"></div>';
+   if ( $uses_elevation ) echo '<div id="elevation' . $div . '"></div>';
+   if ( $uses_polyline_elevation ) echo '<div id="elepoly' . $div . '"></div>';
+  }
+ } else {
+  foreach ( $direction_divs as $div ) {
+   echo '<!--div id="' . $div . '"></div-->';
+   if ( $uses_elevation ) echo '<!--div id="elevation' . $div . '"></div-->';
+   if ( $uses_polyline_elevation ) echo '<!--div id="elepoly' . $div . '"></div-->';
+  }
+ }
+unload_gc(); ?>

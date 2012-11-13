@@ -1,0 +1,463 @@
+<?php load_gc();
+ require_once("/var/www/sites/GC/common/commercemenu.php");
+  $cart=find("Cart","r_Customer",$user['HC']);
+ if (is_null($cart)&&isset($_VAR['id']))$cart=find("Cart", "HC", $_VAR['id']);
+ if ( is_null($cart) ) { echo milford()."[[Checkout box]]: no cart found"; die; }
+ if ( isset($_VAR['result']) || true || isset($_VAR['link']) ) {
+   echo '<form id="checkout" action="">';
+   echo '<table id="billing" style="'.style.'">';
+   echo '<tr><td><h3>Billing Information:</h3></td></tr>';
+   echo '<tr><td> Card Number: ';
+   echo tag( array("input"=>"input",
+    "type"=>"text",
+    "id"=>"x_card_num",
+    "name"=>"x_card_num",
+    "title"=>"Credit Card Number",
+    "value"=>"",
+    "onblur"=>"check('x_card_num');",
+    "style"=>nq($_VAR['style']),
+    "class"=>nq($_VAR['class']),
+    "placeholder"=>nq($_VAR['placeholder'])
+    ),
+    false );
+    echo '</td></tr>';
+    echo '<tr><td> Expiration Date <small>(MMYY)</small>: ';
+    echo tag( array("input"=>"input",
+    "type"=>"text",
+    "id"=>"x_exp_date",
+    "name"=>"x_exp_date",
+    "title"=>"CC Expiration Date",
+    "value"=>"",
+    "onblur"=>"check('x_exp_date');",
+    "style"=>nq($_VAR['style']),
+    "class"=>nq($_VAR['class']),
+    "placeholder"=>nq($_VAR['placeholder'])
+    ),
+    false );
+    echo '</td></tr>';
+    echo '<tr><td> First Name: ';
+    echo tag( array("input"=>"input",
+    "type"=>"text",
+    "id"=>"x_first_name",
+    "name"=>"x_first_name",
+    "title"=>"First Name",
+    "value"=>"",
+    "onblur"=>"check('x_first_name');",
+    "style"=>nq($_VAR['style']),
+    "class"=>nq($_VAR['class']),
+    "placeholder"=>nq($_VAR['placeholder'])
+    ),
+    false );
+    echo ' Last Name: ';
+    echo tag( array("input"=>"input",
+    "type"=>"text",
+    "id"=>"x_last_name",
+    "name"=>"x_last_name",
+    "title"=>"Last Name",
+    "value"=>"",
+    "onblur"=>"check('x_last_name');",
+    "style"=>nq($_VAR['style']),
+    "class"=>nq($_VAR['class']),
+    "placeholder"=>nq($_VAR['placeholder'])
+    ),
+    false );
+    echo '</td></tr>';
+    echo '<tr><td> Company: ';
+    echo tag( array("input"=>"input",
+    "type"=>"text",
+    "id"=>"x_company",
+    "name"=>"x_company",
+    "title"=>"Company",
+    "value"=>"",
+    "style"=>nq($_VAR['style']),
+    "class"=>nq($_VAR['class']),
+    "placeholder"=>nq($_VAR['placeholder'])
+    ),
+    false );
+    echo '</td></tr>';
+    echo '<tr><td> Address: ';
+    echo tag( array("input"=>"input",
+    "type"=>"textarea",
+    "id"=>"x_address",
+    "name"=>"x_address",
+    "title"=>"Address as it appears on your card",
+    "value"=>"",
+    "onblur"=>"check('x_address');",
+    "style"=>nq($_VAR['style']),
+    "class"=>nq($_VAR['class']),
+    "placeholder"=>nq($_VAR['placeholder'])
+    ),
+    false );
+    echo '</td></tr>';
+    echo '<tr><td> City: ';
+    echo tag( array("input"=>"input",
+    "type"=>"text",
+    "id"=>"x_city",
+    "name"=>"x_city",
+    "title"=>"City",
+    "value"=>"",
+    "onblur"=>"check('x_city');",
+    "style"=>nq($_VAR['style']),
+    "class"=>nq($_VAR['class']),
+    "placeholder"=>nq($_VAR['placeholder'])
+    ),
+    false );
+    echo '&nbsp;&nbsp;State: ';
+    echo tag( array("input"=>"input",
+    "type"=>"text",
+    "id"=>"x_state",
+    "name"=>"x_state",
+    "title"=>"State",
+    "value"=>"",
+    "size"=>"6",
+    "onblur"=>"check('x_state');",
+    "style"=>nq($_VAR['style']),
+    "class"=>nq($_VAR['class']),
+    "placeholder"=>nq($_VAR['placeholder'])
+    ),
+    false );
+    echo '&nbsp;&nbsp;Zip: ';
+    echo tag( array("input"=>"input",
+    "type"=>"text",
+    "id"=>"x_zip",
+    "name"=>"x_zip",
+    "title"=>"Zip code",
+	"size"=>"5",
+	"value"=>"",
+    "onblur"=>"check('x_zip');",
+    "style"=>nq($_VAR['style']),
+    "class"=>nq($_VAR['class']),
+    "placeholder"=>nq($_VAR['placeholder'])
+    ),
+    false );
+    echo '</td></tr>';
+    echo '<tr><td> Country: ';
+    echo tag( array("input"=>"input",
+    "type"=>"text",
+    "id"=>"x_country",
+    "name"=>"x_country",
+    "title"=>"Country",
+    "value"=>"USA",
+    "onblur"=>"check('x_country');",
+    "style"=>nq($_VAR['style']),
+    "class"=>nq($_VAR['class']),
+    "placeholder"=>nq($_VAR['placeholder'])
+    ),
+    false );
+    echo '</td></tr>';
+    echo '<tr><td> Phone Number: ';
+    echo tag( array("input"=>"input",
+    "type"=>"text",
+    "id"=>"x_phone",
+    "name"=>"x_phone",
+    "title"=>"Phone Number",
+    "value"=>"",
+    "style"=>nq($_VAR['style']),
+    "class"=>nq($_VAR['class']),
+    "placeholder"=>nq($_VAR['placeholder'])
+    ),
+    false );
+    echo '&nbsp;&nbsp;Fax Number: ';
+    echo tag( array("input"=>"input",
+    "type"=>"text",
+    "id"=>"x_fax",
+    "name"=>"x_fax",
+    "title"=>"Fax Number",
+    "value"=>"",
+    "style"=>nq($_VAR['style']),
+    "class"=>nq($_VAR['class']),
+    "placeholder"=>nq($_VAR['placeholder'])
+    ),
+    false );
+    echo '</td></tr>';
+    echo '<tr><td> Email: ';
+    echo tag( array("input"=>"input",
+    "type"=>"text",
+    "id"=>"x_email",
+    "name"=>"x_email",
+    "title"=>"Email",
+    "value"=>"",
+    "onblur"=>"check('email');",
+    "style"=>nq($_VAR['style']),
+    "class"=>nq($_VAR['class']),
+    "placeholder"=>nq($_VAR['placeholder'])
+    ),
+    false );
+    echo '</td></tr></table>';
+	echo '<table id="shipping" style="'.$style.'">';
+        echo '<tr><td><h3>Shipping Information:</h3></td></tr>';
+	echo '<tr><td> Billing and shipping information is the same? ';
+    echo tag( array("input"=>"input",
+    "type"=>"checkbox",
+    "id"=>"b_and_s",
+    "name"=>"b_and_s",
+    "onclick"=>"billing_is_shipping();",
+    "style"=>nq($_VAR['style']),
+    "class"=>nq($_VAR['class']),
+    "placeholder"=>nq($_VAR['placeholder'])
+    ),
+    false );
+	echo '<tr><td> First name: ';
+    echo tag( array("input"=>"input",
+    "type"=>"text",
+    "id"=>"x_ship_to_first_name",
+    "name"=>"x_ship_to_first_name",
+    "title"=>"Shipping First Name",
+    "value"=>"",
+    "onblur"=>"check('x_ship_to_first_name');",
+    "style"=>nq($_VAR['style']),
+    "class"=>nq($_VAR['class']),
+    "placeholder"=>nq($_VAR['placeholder'])
+    ),
+    false );
+    echo '&nbsp;&nbsp;Last name: ';
+    echo tag( array("input"=>"input",
+    "type"=>"text",
+    "id"=>"x_ship_to_last_name",
+    "name"=>"x_ship_to_last_name",
+    "title"=>"Shipping Last Name",
+    "value"=>"",
+    "onblur"=>"check('x_ship_to_last_name');",
+    "style"=>nq($_VAR['style']),
+    "class"=>nq($_VAR['class']),
+    "placeholder"=>nq($_VAR['placeholder'])
+    ),
+    false );
+    echo '</td></tr>';
+    echo '<tr><td> Company: ';
+    echo tag( array("input"=>"input",
+    "type"=>"text",
+    "id"=>"x_ship_to_company",
+    "name"=>"x_ship_to_company",
+    "title"=>"Shipping address company",
+    "value"=>"",
+    "style"=>nq($_VAR['style']),
+    "class"=>nq($_VAR['class']),
+    "placeholder"=>nq($_VAR['placeholder'])
+    ),
+    false );
+    echo '</td></tr>';
+    echo '<tr><td> Address: ';
+    echo tag( array("input"=>"input",
+    "type"=>"textarea",
+    "id"=>"x_ship_to_address",
+    "name"=>"x_ship_to_address",
+    "title"=>"Shipping Address",
+    "value"=>"",
+    "onblur"=>"check('x_ship_to_address');",
+    "style"=>nq($_VAR['style']),
+    "class"=>nq($_VAR['class']),
+    "placeholder"=>nq($_VAR['placeholder'])
+    ),
+    false );
+    echo '</td></tr>';
+    echo '<tr><td> City: ';
+    echo tag( array("input"=>"input",
+    "type"=>"text",
+    "id"=>"x_ship_to_city",
+    "name"=>"x_ship_to_city",
+    "title"=>"Shipping city",
+    "value"=>"",
+    "size"=>"10",
+    "onblur"=>"check('x_ship_to_city');",
+    "style"=>nq($_VAR['style']),
+    "class"=>nq($_VAR['class']),
+    "placeholder"=>nq($_VAR['placeholder'])
+    ),
+    false );
+    echo '&nbsp;&nbsp;State: ';
+    echo tag( array("input"=>"input",
+    "type"=>"text",
+    "id"=>"x_ship_to_state",
+    "name"=>"x_ship_to_state",
+    "title"=>"Shipping State",
+    "value"=>"",
+    "size"=>"6",
+    "onblur"=>"check('x_ship_to_state');",
+    "style"=>nq($_VAR['style']),
+    "class"=>nq($_VAR['class']),
+    "placeholder"=>nq($_VAR['placeholder'])
+    ),
+    false );
+    echo '&nbsp;&nbsp;Zip: ';
+    echo tag( array("input"=>"input",
+    "type"=>"text",
+    "id"=>"x_ship_to_zip",
+    "name"=>"x_ship_to_zip",
+    "title"=>"Shipping Zip",
+    "value"=>"",
+    "size"=>"5",
+    "onblur"=>"check('x_ship_to_zip');",
+    "style"=>nq($_VAR['style']),
+    "class"=>nq($_VAR['class']),
+    "placeholder"=>nq($_VAR['placeholder'])
+    ),
+    false );
+    echo '</td></tr>';
+    echo '<tr><td> Country: ';
+    echo tag( array("input"=>"input",
+    "type"=>"text",
+    "id"=>"x_ship_to_country",
+    "name"=>"x_ship_to_country",
+    "title"=>"Shipping country",
+    "value"=>"USA",
+    "onblur"=>"check('x_ship_to_country');",
+    "style"=>nq($_VAR['style']),
+    "class"=>nq($_VAR['class']),
+    "placeholder"=>nq($_VAR['placeholder'])
+    ),
+    false );
+    echo '</td></tr></table>';
+    echo tag( array("input"=>"input",
+    "type"=>"hidden",
+    "id"=>"x_invoice_num",
+    "name"=>"x_invoice_num",
+    "value"=>"",
+    "style"=>nq($_VAR['style']),
+    "class"=>nq($_VAR['class']),
+    "placeholder"=>nq($_VAR['placeholder'])
+    ),
+    false );
+    echo tag( array("input"=>"input",
+    "type"=>"hidden",
+    "id"=>"x_invoice_num",
+    "name"=>"x_invoice_num",
+    "value"=>"",
+    "style"=>nq($_VAR['style']),
+    "class"=>nq($_VAR['class']),
+    "placeholder"=>nq($_VAR['placeholder'])
+    ),
+    false );
+    echo tag( array("input"=>"input",
+    "type"=>"hidden",
+    "id"=>"x_invoice_num",
+    "name"=>"x_invoice_num",
+    "value"=>"",
+    "style"=>nq($_VAR['style']),
+    "class"=>nq($_VAR['class']),
+    "placeholder"=>nq($_VAR['placeholder'])
+    ),
+    false );
+    $description="Receipt<br /><hr />";
+    $prod=find_like("order_Product", "r_Order", $cart['r_Order']);
+    foreach ($prod as $p){
+		$pr=getProduct($p['r_Product']);
+		$description.=$pr['name']."\t".$pr['description']."\t".$p['qty']."\t".$p['qty']*$pr['price']."\n<br />";
+	}
+    echo tag( array("input"=>"input",
+    "type"=>"hidden",
+    "id"=>"x_description",
+    "name"=>"x_description",
+    "value"=>$description,
+    "style"=>nq($_VAR['style']),
+    "class"=>nq($_VAR['class']),
+    "placeholder"=>nq($_VAR['placeholder'])
+    ),
+    false );
+    echo tag( array("input"=>"input",
+    "type"=>"hidden",
+    "id"=>"x_amount",
+    "name"=>"x_amount",
+    "value"=>getOrderSubtotal($cart['r_Order']),
+    "style"=>nq($_VAR['style']),
+    "class"=>nq($_VAR['class']),
+    "placeholder"=>nq($_VAR['placeholder'])
+    ),
+    false );
+    echo tag( array("input"=>"input",
+    "type"=>"hidden",
+    "id"=>"x_cust_id",
+    "name"=>"x_cust_id",
+    "value"=>$user['HC'],
+    "style"=>nq($_VAR['style']),
+    "class"=>nq($_VAR['class']),
+    "placeholder"=>nq($_VAR['placeholder'])
+    ),
+    false );
+    echo tag( array("input"=>"input",
+    "type"=>"hidden",
+    "id"=>"x_tax",
+    "name"=>"x_tax",
+    "value"=>(getOrderSubtotal($cart['r_Order'])+getShippingForOrder($cart['r_Order'], "15208"))*.07,
+    "style"=>nq($_VAR['style']),
+    "class"=>nq($_VAR['class']),
+    "placeholder"=>nq($_VAR['placeholder'])
+    ),
+    false );
+    echo tag( array("input"=>"input",
+    "type"=>"hidden",
+    "id"=>"x_tax_exempt",
+    "name"=>"x_tax_exempt",
+    "value"=>"",
+    "style"=>nq($_VAR['style']),
+    "class"=>nq($_VAR['class']),
+    "placeholder"=>nq($_VAR['placeholder'])
+    ),
+    false );
+    echo tag( array("input"=>"input",
+    "type"=>"hidden",
+    "id"=>"x_duty",
+    "name"=>"x_duty",
+    "value"=>"0",
+    "style"=>nq($_VAR['style']),
+    "class"=>nq($_VAR['class']),
+    "placeholder"=>nq($_VAR['placeholder'])
+    ),
+    false );
+    echo tag( array("input"=>"input",
+    "type"=>"hidden",
+    "id"=>"x_po_num",
+    "name"=>"x_po_num",
+    "value"=>"0",
+    "style"=>nq($_VAR['style']),
+    "class"=>nq($_VAR['class']),
+    "placeholder"=>nq($_VAR['placeholder'])
+    ),
+    false );
+    echo tag( array("input"=>"input",
+    "type"=>"hidden",
+    "id"=>"ShippingAmt",
+    "name"=>"ShippingAmt",
+    "value"=>getShippingForOrder($cart['r_Order'], "15208"),
+    "style"=>nq($_VAR['style']),
+    "class"=>nq($_VAR['class']),
+    "placeholder"=>nq($_VAR['placeholder'])
+    ),
+    false );
+    
+  $q="https://www.gudagi.com/gc_input/checkout.php";
+  if ( isset($_VAR['link']) && isset($_VAR['result']) ) {
+   echo milford().'[[Checkout box]]: You only need either the <i>link</i> or the <i>result</i> attribute, not both.'; die;
+  }
+  if ( isset($_VAR['link']) ) {
+   $link=defaults(comdom(nq($_VAR['link'])),$domain.$path);
+   $unknown=defaults(comdom(nq($_VAR['unknown'])),$domain.$path);
+   $fail=defaults(comdom(nq($_VAR['fail'])),$domain.$path);
+   $call=makejax(st('pass',$link,'unknown',$unknown,'fail',$fail),$q);
+   if ( !hasjax($link) ) hide("target",$link);
+   href("checkout",$call,$content);
+  } else
+  if ( isset($_VAR['result']) ) {
+   $content="Checkout";
+   $result=defaults(comdom(nq($_VAR['result'])),$domain.$path);
+   $unknown=defaults(comdom(nq($_VAR['unknown'])),$domain.$path);
+   $fail=defaults(comdom(nq($_VAR['fail'])),$domain.$path);
+   $call=makejax(st('pass',$result,'unknown',$unknown,'fail',$fail),$q);
+   if ( !hasjax($result) ) hide("result",$result);
+   button("checkout",$call,$content);
+  } else {
+   $link=defaults(comdom(nq($_VAR['link'])),$domain.$path);
+   $unknown=defaults(comdom(nq($_VAR['unknown'])),$domain.$path);
+   $fail=defaults(comdom(nq($_VAR['fail'])),$domain.$path);
+   $call=makejax(st('pass',$link,'unknown',$unknown,'fail',$fail),$q);
+   if ( !hasjax($link) ) hide("target",$link);
+   href("checkout",$call,$content);
+  }
+  hide("last",$domain.$path);
+  hide("method", $_VAR['method']);
+  echo '</form>';
+ }
+
+
+unload_gc(); ?>
+

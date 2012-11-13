@@ -1,0 +1,13 @@
+<?php load_gc();
+ $cart=find("Cart", "HC", $user['HC']);
+ if (is_null($product)){
+  echo milford()."[[Cart order]]: No items in cart!";
+ }
+ if (isset($_VAR['link'])){
+  $link=defaults(comdom($_VAR['link'],false),$domain.$path);
+  $link=jax($link,"&order=".$cart['r_Order']);
+  echo 'Order: <a href="'.$link.'">'.$cart['r_Order'].'</a>';
+  
+ }
+ echo $cart['r_Order'];
+unload_gc(); ?>

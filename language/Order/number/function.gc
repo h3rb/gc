@@ -1,0 +1,9 @@
+<?php load_gc();
+ $order=find("Orders", "HC", auv("Order"));
+ if (is_null($order))$order=find("Orders", "HC", auv("order"));
+ if (is_null($order)){
+  echo milford()."[[Order number]]: No Product Found!";
+  die;
+ }
+ echo $order['HC'];
+unload_gc(); ?>

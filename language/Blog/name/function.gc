@@ -1,0 +1,25 @@
+<?php load_gc();
+ $id=nq($_VAR['id']);
+ if ( !isset($_VAR['id']) || strlen($id) <=0 ) $id=auv("blog");
+ if ( strlen($id) <=0 ) {
+  // if no blogs.. otherwise pick first
+  echo milford().'[[blog name]]: No <i>id</i> was provided.'; die;
+ }
+ $blog=find("Blog","HC",$id);
+ if ( is_null($blog) ) {
+  echo milford().'[[blog name]]: Invalid <i>id</i> provided.'; die;
+ }
+ if ( $blog['r_Owner'] != $owner['HC'] ) {
+  echo milford().'[[blog name]]: You are not the owner of that blog.'; die;
+ }
+ if ( isset($_VAR['link']) ) {
+  $link=comdom(nq($_VAR['link']));
+  if ( hasjax($link) ) {
+   echo '<a href="javascript:'.$link.'">'.$blog['name'].'</a>';
+  } else {
+   echo '<a href="'.$link.'?blog='.$id.'">'.$blog['name'].'</a>';
+  }
+ } else {
+  echo $blog['name'];
+ }
+unload_gc(); ?>

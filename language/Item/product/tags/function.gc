@@ -1,0 +1,14 @@
+<?php load_gc(); 
+ $item=find("order_Product", "HC", auv("Item"));
+ if (is_null($item))$item=find("order_Product", "HC", auv("item"));
+ if (is_null($item)){
+  echo milford()."[[Item product tags]]: No item found!";
+  die;
+ }
+ $product=find("Product", "HC", $item['r_Product']);
+ if (is_null($product)){
+  echo milford()."[[Item product tags]]: No Product Found!";
+  die;
+ }
+ echo $product['tags'];
+unload_gc(); ?>

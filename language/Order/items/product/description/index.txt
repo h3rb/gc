@@ -1,0 +1,7 @@
+$ name
+$ descriptionhtml
+$ contacthtml
+$ served
+$ browsing
+$ sold
+$ opened

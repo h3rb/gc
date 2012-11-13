@@ -1,0 +1,13 @@
+<?php load_gc();
+ echo tag(
+ array( "input"=>"input",
+ "type"=>"text",
+ "name"=>"post_subject",
+ "id"=>"post_subject",
+ "size"=>defaults(nq($_VAR['size']),"50"),
+ "class"=>nq($_VAR['class']),
+ "style"=>nq($_VAR['style']),
+ "placeholder"=>nq($_VAR['placeholder'])
+ ),
+ false );
+unload_gc(); ?>

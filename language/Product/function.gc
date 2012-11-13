@@ -1,0 +1,16 @@
+<?php load_gc();
+ require_once("/var/www/sites/GC/common/commercemenu.php");
+ $product=find("Product", "HC", auv("Product"));
+ if (is_null($product))$product=find("Product", "HC", auv("product"));
+ if (is_null($product))$product=find("Product", "HC", nq($_VAR['id']));
+ if (is_null($product))$product=find("Product", "HC", nq($uses['Product']));
+ if (is_null($product)){
+  echo milford()."[[Product]]: No Product Found!";
+  die;	
+ }
+
+ //add security here
+ //Widget that displays product in some default way or user configurable
+ displayProduct($product['HC']);
+ unload_gc();
+?>

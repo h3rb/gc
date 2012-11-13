@@ -1,0 +1,13 @@
+<?php load_gc();
+//does Cart have a limit? limit tag.
+ $limit="";
+ if (is_numeric(nq($_VAR['length']))) $limit=" LIMIT ".nq($_VAR['length']);
+ $items=find_like("order_Product", "r_Order", $_OBJ['HC'], $limit);
+ if (is_null($items)){
+   echo defaults(nq($_VAR['none']), "No items available.");
+ }
+ else{
+  echo iter("Cart", $_CODE, $items);
+ }
+ 
+unload_gc(); ?>

@@ -1,0 +1,11 @@
+<?php load_gc();
+ $width=1;
+ $height=1;
+ if ( isset($_VAR['w']) ) $width=intval(nq($_VAR['w']));
+ else if ( isset($_VAR['width']) ) $width=intval(nq($_VAR['w']));
+ if ( isset($_VAR['h']) ) $height=intval(nq($_VAR['h']));
+ else if ( isset($_VAR['height']) ) $height=intval(nq($_VAR['height']));
+?>
+<img src="http://www.gudagi.com/i/invis.png" width="<?php echo $width ?>" height="<?php echo $height ?>">
+<?php
+unload_gc() ?>

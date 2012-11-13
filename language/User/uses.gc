@@ -1,0 +1,5 @@
+<?php
+ $user=check_cookie();
+ if ( isset($_VAR['redirect']) && ( $expired || is_null($user) ) )
+  redirect( $basepath.'/'.$_VAR['redirect'] );
+?>

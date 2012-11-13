@@ -1,0 +1,3 @@
+<?php load_gc();
+ textarea("contact_comments");
+unload_gc(); ?>

@@ -1,0 +1,7 @@
+<?php load_gc(); echo
+'<textarea name="post_message" id="post_message" rows="'.defaults(nq($_VAR['rows']),"4").
+'" cols="'.defaults(nq($_VAR['cols']),"50").
+'" style="'.defaults(nq($_VAR['style']),"").
+'" class="'.defaults(nq($_VAR['class']),"").
+'"></textarea>';
+unload_gc(); ?>

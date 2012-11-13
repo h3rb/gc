@@ -1,0 +1,10 @@
+<?php load_gc();
+ $store=find("Store", "HC", auv("Store"));
+ if (is_null($store))$store=find("Store", "HC", auv("store"));
+ if (is_null($store)&&isset($_VAR['id']))$store=find("Store", "HC", $_VAR['id']);
+ if (is_null($store)){
+  echo milford()."[[Store logo]]: No Store Found!";
+  die;
+ }
+ echo '<img src="'.$store['image'].'" title="'.$store['name'].'" id="'.$store['HC'].'logo" width="'.$_VAR['width'].'" height="'.$_VAR['height'].'" style="'.$_VAR['style'].'" class="'.$_VAR['class'].'" />';
+unload_gc(); ?>

@@ -1,0 +1,20 @@
+<?php load_gc();
+ $product=find("Product","HC",auv("Product"));
+ if ( is_null($product) ) $product=find("Product","HC",auv("product"));
+ if ( is_null($product) ) { echo milford()."[[product add]]: no product found"; die; }
+ if ( isset($_VAR['result']) || isset($_VAR['link']) ) {
+  if ( isset($_VAR['result']) ) {
+   $result=defaults(comdom($_VAR['result']), $domain.$path);
+   $call=makejax($result,"http://www.gudagi.com/gc_input/product.php","Product=".$product['HC']);
+   echo '<input type="button" name="reply" id="reply" value="'.$text.'" style="'.nq($_VAR['style']).'" class="'.nq($_VAR['class']).'" onmousedown="'.$call.'">';
+  } else {
+   $link=defaults(comdom($_VAR['link']), $domain.$path);
+   $call=makejax($link,"http://www.gudagi.com/gc_input/add.php","Product=".$product['HC']);
+   echo '<a href="javascript:'.$call.'">'.$text.'</a>';
+  }
+ } else {
+  $result=defaults(comdom($_VAR['result']), $domain.$path);
+  $call=makejax($result,"http://www.gudagi.com/gc_input/add.php","Product=".$product['HC']);
+  echo '<input type="button" name="reply" id="reply" value="'.$text.'" style="'.nq($_VAR['style']).'" class="'.nq($_VAR['class']).'" onmousedown="'.$call.'">';
+ }
+unload_gc(); ?>

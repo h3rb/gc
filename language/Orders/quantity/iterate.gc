@@ -1,0 +1,2 @@
+$items=find_like("order_Product", "r_Order", $_OBJ['HC']);
+echo count($items);

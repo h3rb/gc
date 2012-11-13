@@ -1,0 +1,21 @@
+<?php load_gc();
+ $order=find("Orders", "HC", auv("Order"));
+ if (is_null($order))$order=find("Order", "HC", auv("order"));
+ if (is_null($order)){
+  echo milford()."[[Order shipped]]: No Product Found!";
+  die;
+ }
+ $format="Y-m-d";
+ if (isset($_VAR['format'])) $format=$_VAR['format'];
+ if (!is_null($order[r_Shipment])){
+  $shipInfo=find("Shipment", "HC", $order['r_Shipment']);
+  if (is_null($shipInfo['ship_date'])){
+     echo "Pending...";
+  }
+  else{
+   $date=strtotime($shipInfo['ship_date']);
+   echo date($format, $date);
+  }
+ }
+ else echo "Pending...";
+unload_gc(); ?>

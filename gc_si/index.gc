@@ -1,0 +1,13 @@
+blackberry
+go "blackberry/"
+
+iphone
+go "iphone/"
+
+ipad
+go "ipad/"
+
+android
+go "android/"
+
+go "web/"

@@ -1,0 +1,9 @@
+$cart=find("Cart", "r_Customer", $user['HC']);
+if (is_null($cart)) $cart=find("Cart", "HC", auv("Cart"));
+if (!is_null($cart)&&($cart['r_Order']==$_OBJ['r_Order'])){
+	//makejax();
+	echo '<form id="'.$_OBJ[0].'qtyform" name="'.$_OBJ['HC'].'qtyform"><input type="text" id="'.$_OBJ['HC'].'qtyfield" name="'.$_OBJ['HC'].'qtyfield" value="'.$_OBJ['qty'].'" onblur="alert(document.'.$_OBJ['HC'].'qtyfield'.'.value);'.""/*jax()*/.'"/></form>';
+}
+else {
+	echo $_OBJ['qty'];
+}

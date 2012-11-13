@@ -1,0 +1,16 @@
+<?php load_gc();
+ $product=find("Product", "HC", auv("Product"));
+ if (is_null($product))$product=find("Product", "HC", auv("product"));
+ if (is_null($product)){
+  echo milford()."[[Product royalty]]: No Product Found!";
+  die;
+ }
+ if (isset($_VAR['anyone'])||true){//set true condition later
+  if (isset($_VAR['percent'])){
+   echo $product['royalty']."%";
+  }
+  else{
+   echo "Royalty: ".$product['royalty']."%";
+  }
+ }
+unload_gc(); ?>

@@ -1,0 +1,3 @@
+<?php load_gc();
+ $base=nq($_VAR['base']); // tells the wall what to associate itself with. ie base="Blog" or base="User"
+unload_gc(); ?>

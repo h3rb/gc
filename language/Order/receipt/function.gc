@@ -1,0 +1,12 @@
+<?php load_gc();
+ $order=find("Orders", "HC", auv("Order"));
+ if (is_null($order))$order=find("Orders", "HC", auv("order"));
+ if (is_null($order)){
+  echo milford()."[[Order date]]: No Product Found!";
+  die;
+ }
+ $format="Y-m-d H:i:s";
+ if (isset($_VAR['format'])) $format=$_VAR['format'];
+// $datetime=strtotime($order['order_date'])
+ echo date($format);
+unload_gc(); ?>

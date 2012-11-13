@@ -1,0 +1,20 @@
+<?php load_gc();
+//does Orders have a limit? limit tag.
+ if (is_null($user) || $expired) {} else {
+  $limit="";
+  if (is_numeric(nq($_VAR['length']))) $limit=" LIMIT ".nq($_VAR['length']);
+  echo "<hr>";
+  $cart=find("Cart", "HC", auv("Cart"));
+  if (is_null($cart)) $cart=find("Cart", "HC", auv("cart"));
+  if (is_null($cart)) $cart=find("Cart", "r_Customer", $user['HC']);
+  $items=find_like("order_Product", "r_Order", auv("Order"), $limit);
+  if (is_null($items)) $items=find_like("order_Product", "r_Order", auv("order"));
+  if (is_null($items)) $items=find_like("order_Product", "r_Order", $cart['r_Order']);
+  if (is_null($items)){
+    echo defaults(nq($_VAR['none']), "No items available.");
+  }
+  else{
+   echo iter("Items", $_CODE, $items);
+  }
+ }
+unload_gc(); ?>

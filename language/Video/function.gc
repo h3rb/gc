@@ -1,0 +1,41 @@
+<?php load_gc();
+ if ( isset($_VAR['w'])      ) { $w=nq($_VAR['w']); } else
+ if ( isset($_VAR['width'])  ) { $w=nq($_VAR['width']); } else $w=480;
+ if ( isset($_VAR['h'])      ) { $h=nq($_VAR['h']); } else
+ if ( isset($_VAR['height']) ) { $h=nq($_VAR['height']); } else $h=385;
+ if ( isset($_VAR['logo'])   ) { $logo=nq($_VAR['logo']); } else $logo="../../../i/gudatv.png";
+ $youtube="";
+ if ( isset($_VAR['list']) ) {
+ } else
+ if ( isset($_VAR['id']) ) { 
+  // Attempt to locate in the File db
+  $hc=nq($_VAR['id']);
+  $file=find("File","HC",$hc);
+  if ( !is_null($file) ) {
+   $files_project=find("Projects","HC",$file['r_Project']);
+//   $files_project_owner=find("Project","HC",$files_project['r_Creator']);
+   if ( !flag($file['flags'],FILE_DEPRECIATED) && !flag($files_project['flags'],PROJECT_PRIVATE) ) {
+    require_once '/var/www/mediabox.php';
+    init_media();
+    if ( !file_exists("mySlickVideoPlayer.swf") )
+     copy("/var/www/mySlickVideoPlayer.swf", $absolute_path."mySlickVideoPlayer.swf");
+    echo media("",$w,$h,$file['HC'],$logo,"____temp/",$b++,$c++ );
+   } else   // parse as a YouTube embed tag
+   $youtube=$hc;
+  } else   // parse as a YouTube embed tag
+  $youtube=$hc;
+ }
+// var_dump($_VAR);
+ if ( isset($_VAR['youtube']) ) { $youtube=nq($_VAR['youtube']); }
+ if ( isset($_VAR['yt']) )      { $youtube=nq($_VAR['yt']);      }
+ if ( strlen($youtube)>0 ) {
+  echo '<object width="'.$w.'" height="'.$h.'">'
+      .'<param name="movie" value="http://www.youtube.com/v/'.$youtube.'fs=1&amp;hl=en_US"></param>'
+      .'<param name="allowFullScreen" value="true"></param>'
+      .'<param name="allowscriptaccess" value="always"></param>'
+      .'<embed src="http://www.youtube.com/v/'.$youtube.'?fs=1&amp;hl=en_US" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" '
+      .' width="'.$w.'" height="'.$h.'"></embed></object>';
+  unset($_VAR['yt']);
+  unset($_VAR['youtube']);
+ }
+unload_gc(); ?>

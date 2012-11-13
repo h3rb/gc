@@ -1,0 +1,5 @@
+if (!flag($_OBJ['flags'], PRODUCT_STOP)){
+	setlocale(LC_MONETARY, 'en_US');
+	if ($_OBJ['price']!=0&&$_OBJ['price']!="") echo "$".money_format("%n",$_OBJ['price']);
+	else echo "FREE";
+}

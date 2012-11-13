@@ -1,0 +1,7 @@
+if (!flag($_OBJ['flags'], PRODUCT_STOP)){
+if ( isset($_VAR['link']) ) {
+ $link=defaults(comdom($_VAR['link'],false),$domain.$path);
+ $link=jax($link,"&product=".$_OBJ['HC']);
+ echo '<a href="'.$link.'">'.$_OBJ['name'].'</a>';
+} else echo $_OBJ['name'];
+}

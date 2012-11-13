@@ -1,0 +1,3 @@
+<?php load_gc();
+ input("city");
+unload_gc(); ?>

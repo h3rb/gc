@@ -1,0 +1,10 @@
+<?php load_gc();
+ $product=find("Product", "HC", auv("Product"));
+ if (is_null($product))$product=find("Product", "HC", auv("product"));
+ if (is_null($product)){
+  echo milford()."[[Product weight]]: No Product Available!";
+  die;
+ }
+  $kg=$product['shipping_weight_lbs']/2.2;
+  echo number_format($kg,3)." kg";
+unload_gc(); ?>

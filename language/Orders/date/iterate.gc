@@ -1,0 +1,4 @@
+$format="Y-m-d H:i:s";
+//$dt=strtotime($_OBJ['date']);
+$dt=strtotime($_OBJ['order_date']);
+echo date($format, $dt);

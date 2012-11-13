@@ -1,0 +1,16 @@
+<?php load_gc();
+ $post=find("Post","HC",auv("Post"));
+ if ( is_null($post) ) $post=find("Post","HC",auv('post'));
+ if ( is_null($post) ) {
+  echo milford().'[>posts replies<]: No post was found';
+ }
+ else {
+  $topic=find("Topic","HC",$post['r_Topic']);
+  if ( is_null($topic) ) {echo milford().'[>posts replies<]: orphaned post'; die;}
+  $blog=find("Blog","HC",$topic['r_Blog']);
+  if ( $blog['r_Project'] != $project['HC'] ) {echo milford().'[>posts replies<]: no access to this topic<br>';die;}
+  $replies=find_like("Reply","r_Post",$post['HC']);
+  if ( count($replies)<=0 ) { echo defaults(nq($_VAR['alt']),"No replies."); }
+  else echo iter("Posts/replies",$_CODE,$replies);
+ }
+unload_gc(); ?>

@@ -1,0 +1,8 @@
+<?php
+ global $Store=find("Store","r_Project",$HC);
+ if ( is_null($Store) ) {
+  echo '[[uses Store]]: No store associated with this project.';
+  redirect($_SERVER['HTTP_REFERER'],5000);
+  die();
+ }
+?>

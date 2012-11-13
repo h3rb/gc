@@ -1,0 +1,5 @@
+<?php
+function build($ro=3,$co=11,$re=NULL){$a=array(); for($i=0;$i<$ro;$i++)$a[$i]=array();for($i=0;$i<$ro;$i++)for($j=0;$j<$co;$j++)$a[$i][$j]=0;if(is_array($re)){foreach($re as $r){$r=explode("C",$r);$c=intval($r[1])-1;$r=explode("R",$r[0]);$r=intval($r[1])-1;if($a[$r][$c]===1)echo 'Warning, build(): duplicate reservation';else $a[$r][$c]=1;}}else if(!is_null($re)){if(strpos($re,"R")!=false&&strpos($re,"C")!=false){$r=explode("C",$re);$c=intval($r[1]);$r=explode("R",$r[0]);$r=intval($r[1]);$a[$r][$c]=1;}else{echo 'Warning, build(): Bad input $reserve';}}return $a;}
+function reserve($m,$n=1){if($n>10){echo 'The max number of tickets someone can request at once is 10';return $m;}$s=count($m);$f=false;for($r=0;$r<$s;$r++){$mc=0;$c=0;$ss=-1;$f=0;$cs=count($map[$r]);for($t=0;$t<$cs;$t++){if($m[$r][$t]===0){if($ss===-1)$ss=$t;$c++;}else{if($c>0&&$c>$mc){$mc=$c;if($f=($mc>=$n))break;$ss=-1;}}}if($f===1){$e=$n+$ss;echo "Reserving: R$row".$ss."-R$rowC$end";for($t=$ss;$t<$e;$s++)$m[$r][$t]=1;$f=1;}}if($f===0)echo 'Not available in a contiguous block';return $m;}
+$map=reserve(build(3,11,array("R1C4","R1C6","R2C3","R2C7","R3C9","R3C10")),4);
+//var_dump($map);

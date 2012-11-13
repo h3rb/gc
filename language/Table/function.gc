@@ -1,0 +1,81 @@
+<?php load_gc();
+if ( !isset($unique_dataTables)  ) {
+ include '/var/www/sites/GC/common/apis/tablehelper.php';
+}
+if ( !isset($dt) ) {
+ global $dti; $dti=1;
+}
+ $settings=array();
+ $settings['id']=defaults(nq($_VAR['id']),'table'.$dti);
+ $settings['reorder']=defaults(yes(nq($_VAR['reorder'])),true);
+ $settings['activation']=defaults(nq($_VAR['activation'])),'click');
+ $settings['visible']=defaults(yes(nq($_VAR['visible'])),true);
+ $settings['paginate']=defaults(yes(nq($_VAR['paginate'])),true);
+ $settings['two_button']=defaults(yes(nq($_VAR['two_button'])),false);
+ $settings['collapse']=defaults(yes(nq($_VAR['collapse'])),true);
+ $settings['x']=isset($_VAR['w']) ? defaults(nq($_VAR['w']) : defaults(nq($_VAR['width']),'100%');
+ $settings['y']=isset($_VAR['h']) ? defaults(nq($_VAR['h']) : defaults(nq($_VAR['height']),'300px');
+ $settings['xinner']=defaults(nq($_VAR['innerwidth']),'150%');
+ $settings['fixed']=defaults(yes(nq($_VAR['fixed'])),true);
+ $settings['lengthchange']=defaults(yes(nq($_VAR['lengthchange'])),true);
+ $settings['filter']=defaults(yes(nq($_VAR['filter'])),true);
+ $settings['sort']=defaults(yes(nq($_VAR['sort'])),true);
+ $settings['info']=defaults(yes(nq($_VAR['info'])),true);
+ $settings['autowidth']=defaults(yes(nq($_VAR['autowidth'])),true);
+ $settings['jqueryui']=defaults(yes(nq($_VAR['jqueryui'])),true);
+ $settings['group']=defaults(yes(nq($_VAR['group'])),false);
+ $settings['toolbar']=defaults(yes(nq($_VAR['toolbar'])),false);
+ $settings['each']=defaults(nq($_VAR['each']),false);
+ $settings['savestate']=defaults(yes(nq($_VAR['savestate'])),false);
+ $settings['rowcallback']=defaults(nq($_VAR['rowcallback']),false);
+ $settings['editing']=defaults(nq($_VAR['editing']),false);
+ $settings['details']=defaults(nq($_VAR['detailsjs']),false);
+ $settings['details_ajax']=defaults(nq($_VAR['panel']),false);
+ $settings['processing']=defaults(yes(nq($_VAR['processing'])),false);
+ $settings['serverside']=defaults(yes(nq($_VAR['serverside'])),false);
+ $settings['ajax']=defaults(nq($_VAR['loadurl']),false);
+ $settings['start']=defaults(nq($_VAR['start']),0);
+ $settings['length']=defaults(nq($_VAR['length']),10);
+ $settings['loadgap']=defaults(nq($_VAR['loadgap']),100);
+ $settings['cookie']=defaults(nq($_VAR['cookie']),7200);
+ $settings['prefix']=defaults(nq($_VAR['prefix']),"SpryMedia_DataTables_");
+ $settings['data']=defaults(nq($_VAR['data']),false);
+ $settings['callback']=defaults(nq($_VAR['callback']),false);
+ $settings['index']=defaults(yes(nq($_VAR['index'])),false);
+ $settings['class']=defaults(nq($_VAR['class']),'display');
+ $settings['additional']=defaults(nq($_VAR['additional']),'');
+ $settings['footer']=defaults(nq($_VAR['footer']),false);
+ $settings['custom']=defaults(nq($_VAR['custom']),false);
+ $settings['sort']=defaults(yes(nq($_VAR['sort'])),true);
+ $settings['search']=defaults(nq($_VAR['search']),'');
+ $settings['regex']=defaults(nq($_VAR['regex']),false);
+ $settings['smart']=defaults(yes(nq($_VAR['smart'])),true);
+ $settings['js']=defaults(nq($_VAR['js']),false);
+ $settings['dom']=defaults(nq($_VAR['dom']),false);
+ $settings['jquery']=defaults(nq($_VAR['jquery']),false);
+ $settings['scrollinfinite']=defaults(yes(nq($_VAR['scrollinfinite'])),false);
+ $settings['callback_init']=defaults(nq($_VAR['jsinit']),false);
+ $settings['callback_draw']=defaults(nq($_VAR['jsdraw']),false);
+ $settings['callback_data']=defaults(nq($_VAR['jsdata']),false);
+ $settings['callback_load']=defaults(nq($_VAR['jsload']),false);
+ $settings['callback_save']=defaults(nq($_VAR['jssave']),false);
+ $settings['callback_row']=defaults(nq($_VAR['jsrow']),false);
+ $settings['callback_info']=defaults(nq($_VAR['jsinfo']),false);
+ $settings['callback_cookie']=defaults(nq($_VAR['jscookie']),false);
+ $settings['callback_header']=defaults(nq($_VAR['jsheader']),false);
+ $settings['callback_footer']=defaults(nq($_VAR['jsfooter']),false);
+ $settings['callback_format']=defaults(nq($_VAR['jsformat']),false):
+ $settings['tools']=defaults(nq($_VAR['tools']),false);
+ $columns=depipe(nq($_VAR['columns']));
+ if ( count($columns) != 0 ) {
+  $dt=new DataTable($settings);
+  foreach ( $columns as $column ) {
+   $column=desemi($column);
+   $option=dekv(',',$column[0]);
+   $dt->addColumn( $option[0], $option[1], decomma($column[1]) ); // title<,fieldname>;settings|col2..
+   $output="";
+   aol($dt->render($output));
+   echo $output;
+  }
+ }
+unload_gc(); ?>

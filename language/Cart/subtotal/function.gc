@@ -1,0 +1,13 @@
+<?php load_gc();
+ require_once("/var/www/sites/GC/common/commercemenu.php");
+ setlocale(LC_MONETARY, "en_US");
+ $cart=find("Cart", "r_Customer", auv("User"));
+ if (is_null($cart))$cart=find("Cart", "r_Customer", auv("user"));
+ if (is_null($cart))$cart=find("Cart", "r_Customer", $user['HC']); 
+ if (is_null($cart)){
+//  echo milford()."[[Cart subtotal]]: No items in cart!";
+//    unload_gc();
+ }
+ $total=getOrderSubtotal($cart['r_Order']);
+ echo money_format("\$%n", $total);
+unload_gc(); ?>

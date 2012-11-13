@@ -1,0 +1,16 @@
+<?php load_gc();
+   $u=check_cookie();
+   if (!$expired||!is_null($u)){
+    $location=defaults(comdom(nq($_VAR['loc'])),$domain.$path);
+    $content="Log Out";
+    if (isset($_VAR['content'])){
+ 	$content=$_VAR['content'];
+    }
+    $q="http://www.gudagi.com/gc_input/logout.php";
+    $call=makejax(st('pass',$location),$q);
+    button("logout", $call, $content);
+   }
+   else {
+
+   }
+ unload_gc();?>

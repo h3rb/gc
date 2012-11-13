@@ -1,0 +1,3 @@
+$shipment=find("Shipment", "HC", $_OBJ['r_Shipment']);
+echo $shipment['date'].'<br />';
+echo $shipment['carrier'];

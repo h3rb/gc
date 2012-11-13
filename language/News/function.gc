@@ -1,0 +1,56 @@
+<?php load_gc();
+ global $article_number; if ( !isset($article_number) || intval($article_number)==0 || strlen($article_number)==0 ) {
+  $article_number=1;
+ }
+ $prefix="http://api.feedzilla.com/v1/";
+ $query=urlencode(defaults(nq($_VAR['query']),"world news"));
+ $available_categories=json_decode(file_get_contents( $prefix."categories.json" ));
+ $news=array();
+ $categories=depipe(defaults(nq($_VAR['categories']),"Fun Stuff"));
+ $count="count_only=".defaults(nq($_VAR['count']),20);
+ $since="since=".date('Y-m-d',strtotime(defaults(nq($_VAR['since']),"a week ago")));
+ $order="order=".defaults(nq($_VAR['order']),"relevance");
+ $title_only=defaults(nq($_VAR['title_only']),"yes");
+ if ( $title_only == '1' || $title_only == 1 || strtolower($title_only) == "yes" ) $title_only="title_only=1";
+ else $title_only="title_only=0";
+ foreach ( $categories as $category ) {
+  foreach ( $available_categories as $search ) if ( strtolower($category)==strtolower($search->display_category_name) ) {
+   $news[]=json_decode(
+    file_get_contents($prefix.'categories/'.$search->category_id.'/articles.json?'.$count.'&'.$since.'&'.$order.'&'.$title_only)
+   );
+  }
+ }
+ $separator=defaults(nq($_VAR['separator']),'<div style="width:100%; height:1px; border: 1px dotted gray;"></div>');
+ $tag=defaults(nq($_VAR['tag']),"div");
+ $inner['title']=defaults(nq($_VAR['inner.tag']),"div");
+ $inner['url']=defaults(nq($_VAR['inner.url']),"span");
+ $inner['author']=defaults(nq($_VAR['inner.author']),"div");
+ $inner['date']=defaults(nq($_VAR['inner.date']),"div");
+ $inner['source']=defaults(nq($_VAR['inner.source']),"span");
+ $inner['source_url']=defaults(nq($_VAR['inner.source_url']),"span");
+ $innerseperator=defaults(nq($_VAR['inner.seperator']),"");
+ $date_format=defaults(nq($_VAR['date']),"M d, Y");
+ $classprefix=defaults(nq($_VAR['class']),"article");
+ $article_link=defaults(nq($_VAR['article']),"Read &rarr;&#9648;");
+ $source_link=defaults(nq($_VAR['source']),"&#9648;&rarr;");
+ foreach ( $news as $articles ) {
+  foreach ( $articles->articles as $article ) {
+   $atitle=trim($article->title);
+   if ( $atitle[strlen($atitle)-1]==')' ) {
+    $atitle=explode('(',$atitle);
+    $atitle=$atitle[0];
+   }
+?>
+<<?php echo $tag ?> class="<?php echo $classprefix ?>">
+ <<?php echo $inner['title'] ?> class="<?php echo $classprefix ?>_title"><?php echo $atitle ?></<?php echo $inner['title'] ?>>
+ <<?php echo $inner['author'] ?> class="<?php echo $classprefix ?>_author"><?php echo $article->author ?></<?php echo $inner['author'] ?>>
+ <<?php echo $inner['date'] ?> class="<?php echo $classprefix ?>_date"><?php echo date($date_format,strtotime($article->publish_date)) ?></<?php echo $inner['date'] ?>>
+ <<?php echo $inner['url'] ?> class="<?php echo $classprefix ?>_url"><a href="<?php echo $article->url ?>" title="Read this article at the source website" target="_blank"><?php echo $article_link ?></a></<?php echo $inner['url'] ?>>
+ <<?php echo $inner['source'] ?> class="<?php echo $classprefix ?>_source"><?php echo $article->source ?></<?php echo $inner['source'] ?>>
+ <!--<?php echo $inner['source_url'] ?> class="<?php echo $classprefix ?>_source_url"><a href="<?php echo $article->source_url ?>"><?php echo $source_link ?></a></<?php echo $inner['source_url'] ?>-->
+</<?php echo $tag ?>>
+<?php echo $separator ?>
+<?php
+  }
+ }
+unload_gc() ?>

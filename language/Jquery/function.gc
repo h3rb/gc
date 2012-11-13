@@ -1,0 +1,31 @@
+<?php load_gc();
+include_once '/var/www/jquery/jquery.php';
+global $jquery_loaded, $jquery_version;
+if ( $jquery_loaded !== true ) {
+ $jquery_version = "latest";
+ $jquery_loaded = true;
+ if ( isset($_VAR['version']) ) $jquery_version =defaults(nq($_VAR['version']),"latest");
+ if ( isset($_VAR['latest']) )  $jquery_version="latest";
+ if ( $jquery_version == "latest" )
+ echo '<script type="text/javascript" src="http://code.jquery.com/jquery-latest.pack.js"></script>';
+ else echo '<script src="http://code.jquery.com/jquery-' . $jquery_version . '.min.js" type="text/javascript"></script>';
+}
+if ( isset($_VAR['plugins']) ) {
+ $plugins=decomma(nq($_VAR['plugins']));
+ if ( count($plugins) > 0 )
+ load_jquery_plugins( $plugins,
+  ( isset($_VAR['css'])?nq($_VAR['css']):false ),
+  ( isset($_VAR['path'])?nq($_VAR['path']):false ),
+  ( isset($_VAR['localization'])?nq($_VAR['localization']):false )
+ );
+}
+if ( isset($_VAR['plugin']) ) {
+ $plugin =nq($_VAR['plugin']);
+ if ( strlen($plugin) > 0 )
+ load_jquery_plugins( $plugin,
+  ( isset($_VAR['css'])?nq($_VAR['css']):false ),
+  ( isset($_VAR['path'])?nq($_VAR['path']):false ),
+  ( isset($_VAR['localization'])?nq($_VAR['localization']):false )
+ );
+}
+unload_gc() ?>

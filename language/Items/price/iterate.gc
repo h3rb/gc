@@ -1,0 +1,20 @@
+require_once("/var/www/sites/GC/common/commercemenu.php");
+$product=find("Product", "HC", $_OBJ['r_Product']);
+setlocale(LC_MONETARY,'en_US');
+$optionPrice=0;
+if ($_OBJ['Options']!=""){
+ $optionList=parseOptions($_OBJ['Options']);
+ foreach ($optionList as $group){
+  if ($group['group']['price']>0){
+   //$optionPrice+=$group['group']['price'];
+  }
+  foreach ($group['options'] as $options){
+   if ($options['price']>0){
+    $optionPrice+=$options['price'];
+   }
+  }
+ }
+}
+$price=($product['price']+$optionPrice)*$_OBJ['qty'];
+if ($price!=0&&$price!="") echo money_format("\$%n", $price);
+else echo "FREE";

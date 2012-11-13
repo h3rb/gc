@@ -1,0 +1,9 @@
+<?php load_gc();
+ $product=find("Product", "HC", auv("Product"));
+ if (is_null($product))$product=find("Product", "HC", auv("product"));
+ if (is_null($product)){
+  echo milford()."[[Product image]]: No Product Found!";
+  die;
+ }
+ echo '<img src="'.$product['image'].'" title="'.$product['name'].'" id="'.$product['HC'].'image" width="'.$_VAR['width'].'" height="'.$_VAR['height'].'" />';
+unload_gc(); ?>

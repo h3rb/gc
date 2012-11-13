@@ -1,0 +1,14 @@
+<?php load_gc();
+//does Orders have a limit? limit tag.
+ $limit="";
+ if (is_null($user)){} else {
+  if (is_numeric(nq($_VAR['length']))) $limit=" LIMIT ".nq($_VAR['length']);
+  $posts=find_like("Post", "r_Topic", auv('topic'), $limit);
+  if (is_null($orders)){
+    echo defaults(nq($_VAR['none']), "No orders available.");
+  }
+  else{
+   echo iter("Topic/posts", $_CODE, $post);
+  }
+ }
+unload_gc(); ?>

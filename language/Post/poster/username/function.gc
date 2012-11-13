@@ -1,0 +1,16 @@
+<?php load_gc();
+ $post=find("Post","HC",auv('Post'));
+ if ( is_null($post) ) $post=find("Post","HC",auv('post'));
+ if ( is_null($post) ) { echo ''; } else
+ if ( $post['r_Poster'] == "anonymous" ) echo "";
+ else {
+  $poster=find("Auth","r_Contact",$post['r_Poster']);
+  if ( isset($_VAR['link']) ) {
+   $link=defaults(comdom($_VAR['link']));
+   $link=jax($link,"&user=".$post['r_Poster']);
+   echo '<a href="'.$link.'" class="'.nq($_VAR['class']).'" style="'.nq($_VAR['style']).'">'.$poster['username'].'</a>';
+  } else
+  echo $poster['username'];
+ }
+ unset($poster);
+unload_gc(); ?>

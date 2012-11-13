@@ -1,0 +1,56 @@
+<?php load_gc();
+ global $db_prefix; // add [[access user start]] [[access user end]] functionality
+ $postfix=defaults(nq($_VAR['table']),"User");
+ $old_db_prefix=$db_prefix;
+ $db_prefix="/sqlite/userdbs/".$project['HC']."/";
+ $level = array();
+ $levels = array();
+ $headers = isset($_VAR['headers']);
+ if ( isset($_VAR['guest']) ) $level=0;
+ if ( isset($_VAR['user']) ) $level=1;
+ if ( isset($_VAR['buyer']) ) $level=2;
+ if ( isset($_VAR['member']) ) $level=3;
+ if ( isset($_VAR['admin']) ) $level=4;
+ if ( isset($_VAR['level']) ) {
+  $levels=decomma(nq($_VAR['level']));
+ } else
+ if ( isset($_VAR['levels']) ) {
+  $levels=decomma(nq($_VAR['levels']));
+ }
+ $granted=false;
+ switch ( $level ) {
+  case 0: $granted=true; break;
+  case 1: if ( !is_null($user) && !$expired ) $granted=true; break;
+  case 2: if ( count(find_like("Orders","r_User",$user['HC']))>0 ) $granted=true; break;
+  case 3: if ( $user['HC'] == $project['r_Creator'] || project_member($project,$user) ) $granted=true; break;
+  case 4: if ( $user['HC'] == $project['r_Creator'] ) $granted=true; break;
+ }
+ if ( count($levels)>0 ) {
+  $access=Establish( $postfix, $project['HC'], "Access", false, false );
+  $access['level']=decomma($access['levels']);
+  foreach ( $access['level'] as $a ) {
+   $found=false;
+   foreach ( $levels as $b ) if ( is($a,$b) ) $found=true;
+   if ( $found === false ) { $granted=false; break; }
+  }
+ }
+ $granting=isset($_VAR['grant']) ? true : false;
+ if ( $granting === true ) {
+  $access=Establish( $postfix, $project['HC'], "Access", false, false );
+  $granted=decomma($access['levels']);
+  $granting=decomma(nq($_VAR['grant']));
+  foreach ( $granting as $grant ) {
+   $found=false;
+   foreach ( $granted as $existing ) if ( $existing == $grant ) $found=true;
+   if ( $found === false ) $granted[]=$grant;
+  }
+  $access['levels']=implode(",",$granted);
+  Reestablish( $postfix, $project['HC'], $access['_class_name'], $access );
+ } else
+ if ( $granted === false ) {
+  if ( $headers ) header( "Location: ".str_replace(".html",".php",str_replace(".html",".php",nq($_VAR['denied']))) );
+  else echo '<script type="text/javascript"> window.location="'.str_replace(".htm",".php",str_replace(".html",".php",nq($_VAR['denied']))).'"; </script>';
+  die;
+ }
+ $db_prefix=$old_db_prefix;
+unload_gc() ?>

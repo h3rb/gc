@@ -1,0 +1,16 @@
+<?php load_gc();
+ $topic=find("Topic","HC",auv('Topic'));
+ if ( is_null($topic) ) $topic=find("Topic","HC",auv('topic'));
+ if ( is_null($topic) ) {
+  $topic=find("Topic","HC","r_Blog",auv('blog'));
+  if ( is_null($topic) ) { 
+   echo milford()."[[topic description]]: no topic found"; die;
+  }
+ }
+ if ( isset($_VAR['link']) ) {
+  $link=defaults(comdom(nq($_VAR['link'])),$domain.$path);
+  $call=jax($link);
+  echo '<a href="'.$call.'">'.$topic['description'].'</a>';
+ }
+ else echo $topic['description'];
+unload_gc(); ?>

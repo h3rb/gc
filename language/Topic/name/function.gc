@@ -1,0 +1,16 @@
+<?php load_gc();
+ $topic=find("Topic","HC",auv('Topic'));
+ if ( is_null($topic) ) $topic=find("Topic","HC",auv('topic'));
+ if ( is_null($topic) ) {
+  $topic=find("Topic","HC","r_Blog",auv('blog'));
+  if ( is_null($topic) ) { 
+   echo milford()."[[topic name]]:: invalid id provided"; die;
+  }
+ }
+ if ( isset($_VAR['link']) ) {
+  $link=defaults(comdom($_VAR['link']),$domain.$path);
+  $call=jax($link);
+  echo '<a href="'.$call.'">'.$topic['name'].'</a>';
+ }
+ else echo $topic['name'];
+unload_gc(); ?>

@@ -1,0 +1,49 @@
+<?php load_gc();
+ global $add_this;
+ $add_this++;
+ if ( $addthis <= 1 ) {
+?>
+<script type="text/javascript" src="http://s7.addthis.com/js/200/addthis_widget.js"></script>
+<?php
+ }
+?>
+<script type="text/javascript">
+ var addthis<?php echo $add_this ?>_title=null,
+     addthis<?php echo $add_this ?>_config= { username:"<?php echo nq($_VAR['username']) ?>" },
+     addthis<?php echo $add_this ?>_url=null,
+     addthis<?php echo $add_this ?>_pub="<?php echo nq($_VAR['username']) ?>";
+ function addthis<?php echo $add_this ?>_oad(us,addu,addc,addT,addL) {
+  addthis<?php echo $add_this ?>_title=addc;
+  addthis<?php echo $add_this ?>_url=addu;
+  if ( addT!=false ) {
+   addthis<?php echo $add_this ?>_config = {
+     ui_offset_top: addT,
+     ui_offset_left: addL,
+	 username: "<?php echo nq($_VAR['username'] ) ?>"
+	 };
+  } else {
+   addthis<?php echo $add_this ?>_config=null;
+  }
+  return addthis_open(us,"",addu,addc);
+ }
+ function updateAddThis<?php echo $add_this ?>(addu,addt) {
+  addthis<?php echo $add_this ?>_title=addu;
+  addthis<?php echo $add_this ?>_url=addt;
+//	 alert("updateda!"+addthis_config.username+addthis_config.ui_click+addthis_config.url+addthis_config.title);
+  addthis<?php echo $add_this ?>_config = {
+	 username: "<?php echo $add_this ?>",
+	 ui_click: true,
+	 url: addu,
+	 title: addt
+	 };
+//	 alert("updatedb!"+addthis_config.username+addthis_config.ui_click+addthis_config.url+addthis_config.title);
+ }
+</script>
+<!-- AddThis Button <?php echo $add_this ?> BEGIN -->
+<a title="Share this!" href="http://www.addthis.com/bookmark.php?v=20"
+ onmouseover="return addthis<?php echo $add_this ?>_oad(this,'<?php echo strlen(nq($_VAR['url'])) > 0 ? nq($_VAR['url']) : curPageURL() ?>','',false,0);"
+ onmouseout="addthis_close()" onclick="return addthis_sendto()"><img src="<?php echo (strlen(nq($_VAR['image'])) > 0 ? nq($_VAR['image']) : "http://s7.addthis.com/static/btn/sm-plus.gif") ?>" width="<?php echo (strlen(nq($_VAR['width'])) > 0 ? nq($_VAR['width']) : 16) ?>" height="<?php echo (strlen(nq($_VAR['height'])) > 0 ? nq($_VAR['height']) : 16) ?>"
+ alt="Bookmark and Share" style="border:0"/></a>
+<!-- AddThis Button <?php echo $add_this ?> END -->
+<?php
+unload_gc(); ?>

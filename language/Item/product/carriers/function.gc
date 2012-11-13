@@ -1,0 +1,32 @@
+<?php load_gc();
+ $item=find("order_Product", "HC", auv("Item"));
+ if (is_null($item))$item=find("order_Product", "HC", auv("item"));
+ if (is_null($item)){
+  echo milford()."[[Item product carriers]]: No item Available!";
+  die;
+ }
+ $product=find("Product", "HC", $item['r_Product']);
+ if (is_null($product)){
+  echo milford()."[[Item product carriers]]: No Product Available!";
+ }
+ $carriers=explode("|",$product['carriers']);
+ 
+ //if buttons
+  $style="";
+  if (isset($_VAR['style'])) $style=$_VAR['style'];
+  echo '<table id="'.$style.'">';
+  foreach ($carriers as $carrier){
+   echo $carrier;
+   if ($carrier=="UPS"){
+    echo ' <img src="/var/www/fmimages/UPSLogo.gif" title="UPS" /><br />';
+   }
+   else if ($carrier=="FedEx"){
+    echo ' <img src="/var/www/fmimages/FedExLogo.gif" title="FedEx" /><br />';
+   }
+   else if ($carrier=="USPS"){
+    echo ' <img src="/var/www/fmimages/USPSLogo.gif" title="USPS" /><br />';
+   }
+   echo '</td></tr>';
+  }
+  echo '</table>';
+unload_gc(); ?>

@@ -1,0 +1,59 @@
+<?php load_gc();
+ if ($expired||is_null($u)){
+  echo '<head><script type="text/javascript" src="https://www.gudagi.com/js/jquery-1.3.2.min.js"></script>';
+  $q="https://www.gudagi.com/gc_input/register.php?update=0";
+      $result=defaults(comdom(nq($_VAR['result'])),$domain.$path);
+      $unknown=defaults(comdom(nq($_VAR['unknown'])),$domain.$path);
+      $fail=defaults(comdom(nq($_VAR['fail'])),$domain.$path);
+      $call=makejax(st('pass',$result,'fail',array('response_message'=>"https://www.gudagi.com/messages/register_fail.php")),$q);
+  echo '<style type="text/css">
+         .register_active{
+	    position: fixed;
+            top: 0px;
+            right: 0px;
+	    z-index: 998;
+            width: 100%;
+            height: 100%;
+            opacity: 0.9;
+	    background-color: #FFFFFF;
+         }
+        </style>
+  <script type="text/javascript">
+   var active=0;
+   var holder="";
+   $(document).ready(function ($){
+    $("#register").click(function (){
+     if (active==0){
+      var x=document.createElement("div");
+      $(x).addClass("register_active");
+      $(x).attr("id", "register_active");
+      $(document.body).append(x);
+      var temp="<div id=\"register_box\"style=\"background-image:url(\'https://gudagi.com/fmimages/1auth.png\'); background-color: black; background-repeat:no-repeat; width: 444px; height: 242px; color: orange; position: fixed; opacity:1.0; z-index:1000;top:0; margin: 10%; padding: 10px;\"><span onclick=\"var t=document.getElementById(\'register_active\'); t.parentNode.removeChild(t); active=0;\" style=\"color: red;\">[X] Close</span><span style=\"color:pink\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;New User Sign Up - All fields required.</span><form name=\"registerForm\" id=\"registerForm\" action=\"https://www.gudagi.com/gc_input/register.php?update=0\"><table>";
+      temp+="<tr><td>Username:</td><td><input type=\"text\" id=\"username\" name=\"username\" value=\"\" /><br /></td></tr>";
+      temp+="<tr><td>Password:</td><td><input type=\"password\" id=\"password\" name=\"password\" value=\"\" /></td></tr>";
+      temp+="<tr><td>Confirm Password:</td><td><input type=\"password\" id=\"passwordCheck\" name=\"passwordCheck\" value=\"\" /></td></tr>";
+      temp+="<tr><td>Email:</td><td><input type=\"text\" id=\"email\" name=\"email\" value=\"\" /></td></tr>";
+      temp+="<tr><td>First name:</td><td><input type=\"text\" id=\"fname\" name=\"fname\" value=\"\" /></td></tr>";
+      temp+="<tr><td>Last name:</td><td><input type=\"text\" id=\"lname\" name=\"lname\" value=\"\" /></td></tr>";';
+    if ( strlen(nq($_VAR['terms']))>0 )
+    echo 'temp+="<tr><td><input type=\"checkbox\" name=\"agree\"></td><td>By checking this box I agree to the <a href=\"'.str_replace(".html",".php",nq($_VAR['terms'])).'\">terms and conditions</a> of this store and of Gudagi.com&reg;</td></tr>";';
+    else
+    echo 'temp+="<tr><td><input type=\"checkbox\" name=\"agree\"></td><td><small>By checking this box I agree<Br>to the terms and conditions<br>of this store and of Gudagi.com&reg;</small></td></tr>";';
+echo 'temp+="<tr><td><a href=\"https://gudagi.com/policy\" target=\"_blank\"><small>Gudagi OneLogin&trade; Policy</small></a></td><td><input type=\"button\" value=\"'. defaults(nq($_VAR['button']),"Register&rarr;") .'\" onmousedown=\"javascript: '.$call.';\"/></td></tr>";
+      temp+="</table></form><span id=\"response_message\"></span><div>";
+      $(".register_active").append(temp);
+      active=1;
+     }
+     else {
+      active=0;
+      $(document.body).removeClass("register_active");
+      $(document.body).html(holder);    
+     }
+    });
+   });
+  </script></head>';
+   echo '<span id="register" class="'.defaults(nq($_VAR['register']),"").' style="'.defaults(nq($_VAR['style']),"color: blue").'">'.defaults(nq($_VAR['content']),"Click here to register a new account.").'</span>';
+ }
+ else {
+ }
+ unload_gc(); ?>

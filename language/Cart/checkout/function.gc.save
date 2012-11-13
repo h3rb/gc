@@ -1,0 +1,46 @@
+<?php load_gc();
+ $cart=find("Cart","HC",auv("Product"));
+ if ( is_null($product) ) $product=find("Product","HC",auv("product"));
+ if ( is_null($product) ) { echo milford()."[[product add]]: no product found"; die; }
+ if ( isset($_VAR['result']) || isset($_VAR['link']) || isset($_VAR['quantity']) ) {
+   $val=1;
+    "title"=>"quantity",
+    "value"=>$val,
+    "style"=>nq($_VAR['style']),
+    "class"=>nq($_VAR['class']),
+    "placeholder"=>nq($_VAR['placeholder'])
+    ),
+    false );
+  $q="http://www.gudagi.com/gc_input/add_to_cart.php";
+  $_POST['product']=$product['HC'];
+  $_POST['isAdd']=$_VAR['quantity'];
+  if ( isset($_VAR['link']) && isset($_VAR['result']) ) {
+   echo milford().'[[Product add]]: You only need either the <i>link</i> or the <i>result</i> attribute, not both.'; die;
+  }
+  if ( isset($_VAR['link']) ) {
+   $link=defaults(comdom(nq($_VAR['link'])),$domain.$path);
+   $unknown=defaults(comdom(nq($_VAR['unknown'])),$domain.$path);
+   $fail=defaults(comdom(nq($_VAR['fail'])),$domain.$path);
+   $call=makejax(st('pass',$link,'unknown',$unknown,'fail',$fail),$q);
+   if ( !hasjax($link) ) hide("target",$link);
+   href("add",$call,$content);
+  } else
+  if ( isset($_VAR['result']) ) {
+   $result=defaults(comdom(nq($_VAR['result'])),$domain.$path);
+   $unknown=defaults(comdom(nq($_VAR['unknown'])),$domain.$path);
+   $fail=defaults(comdom(nq($_VAR['fail'])),$domain.$path);
+   $call=makejax(st('pass',$result,'unknown',$unknown,'fail',$fail),$q);
+   if ( !hasjax($result) ) hide("result",$result);
+   button("add",$call,$content);
+  } else {
+   $link=defaults(comdom(nq($_VAR['link'])),$domain.$path);
+   $unknown=defaults(comdom(nq($_VAR['unknown'])),$domain.$path);
+   $fail=defaults(comdom(nq($_VAR['fail'])),$domain.$path);
+   $call=makejax(st('pass',$link,'unknown',$unknown,'fail',$fail),$q);
+   if ( !hasjax($link) ) hide("target",$link);
+   href("add",$call,$content);
+  }
+  hide("last",$domain.$path);
+  echo '</form>';
+ }
+unload_gc(); ?>

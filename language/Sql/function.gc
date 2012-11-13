@@ -1,0 +1,128 @@
+<?php load_gc(); global $db_prefix; $db_prefix_old=$db_prefix;
+
+if ( !function_exists('render_data') ) {
+ function render_data( $m, $d, $pre="data", $notag=false ) {
+  $m=decolon($m);
+  if ( is_null($d) ) return;
+  if ( is_array($d) && count($d) == 0 || !is_array($d) ) return;
+  $m[0]=strtolower($m[0]);
+  $multiple=($total=count($d))>1;
+  switch ( $m[0] ) {
+   case 'js':
+    if ( $notag==false ) echo '<script>
+';
+     $i=0;
+     foreach ( $d as $row ) {
+      foreach ( $row as $field=>$value ) {
+       echo ' var '.$pre;
+       if ( $total != 1 ) echo $i.'_';
+       echo $field.'=';
+       if ( is_number($value) ) echo $value.';';
+       else if ( yes($value) ) echo 'true;';
+       else if ( no($value) ) echo 'false;';
+       else echo '"'.str_replace('"','\"',str_replace('\\','\\\\',$value)).'"';
+      }
+     }
+    if ( $notag==false ) echo '
+</script>';
+    break;
+   case 'json':
+ $o1='';
+ foreach ( $d as $row ) {
+  if ( strlen($o1) > 0 ) $o1.=', ';
+  $o2='';
+  foreach ( $row as $field=>$value ) {
+   if ( strlen($o2) > 0 ) $o2.=', ';
+   if ( yes($value) ) echo '"'.$field.'":true';
+   else if ( is_number($value) ) echo '"'.$field.'":'.$value;
+   else echo '"'.$field.'":"'.$value.'"';
+  }
+  $o1.='{'.$o2.'}';
+ }
+ echo $o1;
+    break;
+   case 'table':
+    break;
+   case 'form': // form:action=something,method=something,fieldname=inputtype where inputtype is a special set of codes
+    break;
+   case 'kv':
+    if ( is(trim($m[1]),'base64') ) {
+ foreach ( $d as $row ) foreach ( $row as $field=>$value ) echo $field.':'.base64_encode($value).'
+'; } else {
+ foreach ( $d as $row ) foreach ( $row as $field=>$value ) echo '`'.$field.'`:'.$value.'
+'; }
+    break;
+   case 'base64':
+    break;
+  }//switch
+ }//render_data
+}//if
+
+ $postfix=defaults(strtolower(nq($_VAR['table'])),"Stored");
+ $memory=isset(nq($_VAR['memory']))?true:false;
+ $json=isset(nq($_VAR['json']))?true:false;
+ if ( $memory === true ) $db_prefix="/instances/".$project['HC'].'/'; else $db_prefix="/sqlite/userdbs/".$project['HC']."/";
+ if ( !file_exists($db_prefix) ) { mkdir( $dbprefix, 0655 ); mkdir( $dbprefix.'hashes', 0655 ); }
+ if ( !file_exists($db_prefix.$postfix) ) {
+  try { $db = new PDO("sqlite:$db_prefix$postfix.db" ); } catch ( PDOException $e ) { $failed=$e->getMessage(); }
+ }
+ $prefix=defaults(nq($_VAR['name']),'data');
+ $table=defaults(nq($_VAR['table']),'data');
+ $render=defaults(nq($_VAR['render']),'js');
+ $notag=defaults(!yes(nq($_VAR['tag'])),false);
+ $limit=defaults(nq($_VAR['limit']),false);
+ $start=defaults(nq($_VAR['start']),false);
+ $sort=decomma(defaults(nq($_VAR['sort']),',ASC'));
+ $where=false;
+ if ( isset($_VAR['where']) ) $where=strtolower(nq($_VAR['where']))=='all'?true:depipekv(nq($_VAR['where']));
+ if ( isset($_VAR['find'])  ) $find =strtolower(nq($_VAR['find'])) =='all'?true:depipekv(nq($_VAR['find' ]));
+ if ( strtolower($sort) == 'descending' ) $sort='DESC';
+ if ( strtolower($sort) == 'ascending' ) $sort='ASC';
+ if ( isset($_VAR['create']) ) {
+  if ( table_exists($table) ) {
+   echo "<!-- GC [[sql create]]: Table already exists, no action taken. -->";
+  } else {
+   $columns=decomma($_VAR['create']);
+   $schema='';
+   foreach ( $columns as $column ) {
+    $name=preg_replace(“/[^a-zA-Z0-9\s]/”, “”, $column);
+    if ( strtolower($name) != 'hash' ) $schema .= strtolower($name).' text,';
+   }
+   $schema.=' hash text';
+   create_table( $table, $schema );
+   $schema=str_replace(' text,','',$schema);
+   echo "<!-- GC [[sql create]]: Added table '$table' with columns ($schema) -->";
+  }
+ } else
+ if ( isset($_VAR['update']) ) {
+  $update=dekv(',',nq($_VAR['update']));
+  if ( $where===true ) {
+   update_all_by_array( $table, $update );
+  } else
+  if ( $where===false ) {
+   echo milford().'[[sql update]]: Needs a "where" or "find" tag<br><br>'; die;
+  } else {
+   $q=' WHERE '.$where;
+   if ( $sort !== false ) $q.= ' ORDER BY '.$sort[0].' '.$sort[1];
+   if ( $limit !== false ) $q.= ' LIMIT '.$limit;
+   update_set_by_array( $table, find_all($table,$q), $update );
+  }
+ } else
+ if ( isset($_VAR['insert']) ) {
+  $data=depipekv(nq($_VAR['insert']));
+  $data['HC']=hash_code( $table, 10, $db_prefix );
+  insert_array( $table, $data );
+  if ( isset($_VAR['render']) ) render_data( $render, find($table,"HC",$data['HC']) );
+ } else if ( $where == true ) {
+  $res=find_all($table);
+  render_data( $render, $res, $prefix );
+ } else if ( $where !== false ) {
+  $q=' WHERE '.$where;
+  if ( $sort !== false ) $q.= ' ORDER BY '.$sort[0].' '.$sort[1];
+  if ( $limit !== false ) $q.= ' LIMIT '.$limit;
+  $res=find_all($table,$q);
+  render_data( $render, $res, $prefix );
+ } else {
+ }
+
+$db_prefix=$db_prefix_old; unload_gc(); ?>

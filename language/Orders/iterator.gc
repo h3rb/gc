@@ -1,0 +1,19 @@
+<?php load_gc();
+//does Orders have a limit? limit tag.
+ $limit="";
+ if (is_null($user)){} else {
+  if (is_numeric(nq($_VAR['length']))) $limit=" LIMIT ".nq($_VAR['length']);
+  $orders=find_like("Orders", "r_Buyer", $user['HC'], $limit);
+  if (is_null($orders)){
+    echo defaults(nq($_VAR['none']), "No orders available.");
+  }
+  else{
+   $temp=array();
+   foreach ($orders as $order){
+    if (flag($order['flags'], ORDER_COMPLETE)) $temp[]=$order;
+   }
+   $orders=$temp;
+   echo iter("Orders", $_CODE, $orders, "order_Product", "r_Order");
+  }
+ }
+unload_gc(); ?>

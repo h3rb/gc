@@ -1,0 +1,13 @@
+<?php
+ load_gc();
+ $cart=find("Cart", "r_Customer", auv("User"));
+ if (is_null($cart))$cart=find("Cart", "HC", auv("User"));
+ if (is_null($cart))$cart=find("Cart", "HC", nq($_VAR['id']));
+ if (is_null($cart))$cart=find("Cart", "HC", nq($uses['cart']));
+ if (is_null($cart)){
+  echo milford()."[[Cart]]: No Cart Found!";
+  die;	
+ }
+ displayOrder($cart['r_Order']);
+ unload_gc();
+?>

@@ -1,0 +1,10 @@
+<?php
+require_once("/gc/common/commercemenu.php")
+ $order=find("Orders", "HC", auv("Order"));
+ if (is_null($order))$order=find("Orders", "HC", auv("Order"));
+ if (is_null($order)){
+  echo milford()."[[Order zip]]: No order Available!";
+  die;
+ }
+ echo $order['zip'];
+?>

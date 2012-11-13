@@ -1,0 +1,11 @@
+ $limit="";
+ if (is_numeric(nq($_VAR['length']))) $limit=" LIMIT ".nq($_VAR['length']);
+ $items=find_like("order_Product", "r_Order", $_OBJ['r_Order'], $limit);
+ if (is_null($items)){
+   echo defaults(nq($_VAR['none']), "No items.");
+ }
+ else{
+  echo iter("Cart", $_CODE, $items, "Cart", "items");
+ }
+ 
+unload_gc(); ?>

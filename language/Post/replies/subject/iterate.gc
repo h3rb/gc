@@ -1,0 +1,9 @@
+if ( isset($_VAR['link']) ) {
+ $link=comdom($_VAR['link']);
+ $call=makejax($link);
+ echo '<a href="javascript:'.$call.'">';
+}
+echo $_OBJ['subject'];
+if ( isset($_VAR['link']) ) {
+ echo '</a>';
+}

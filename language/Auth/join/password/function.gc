@@ -1,0 +1,11 @@
+<?php load_gc();
+echo tag(array("input"=>"input",
+ "type"=>"password",
+ "name"=>"password",
+ "id"=>"password",
+ "size"=>"",
+ "class"=>nq($_VAR['class']),
+ "style"=>nq($_VAR['style']),
+ "placeholder"=>nq($_VAR['placeholder'])
+));
+unload_gc(); ?>

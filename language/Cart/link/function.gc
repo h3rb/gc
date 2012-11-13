@@ -1,0 +1,17 @@
+<?php load_gc();
+  if (isset($user)){
+   $Cart=find("Cart", "r_Customer", $user);
+  if (!is_null($Cart)){
+   $link=defaults(comdom($_VAR['loc'],false),$domain.$path);
+   $link=jax($link,"&cart=".$Cart['HC']);
+   echo '<a href="'.$link.'">View Cart</a>';
+  }
+  else {
+   echo milford()."[[Store link]]: No Store Found!";
+   die;
+  }
+ }
+ else{
+  echo "You must be logged in to purchase items.";
+ }
+unload_gc(); ?>

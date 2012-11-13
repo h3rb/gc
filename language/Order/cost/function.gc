@@ -1,0 +1,14 @@
+<?php load_gc();
+ require_once("/var/www/sites/GC/common/commercemenu.php");
+ $order=find("Orders", "HC", auv("Order"));
+ if (is_null($order))$order=find("Orders", "HC", auv("order"));
+ if (is_null($order)){
+  echo milford()."[[Order cost]]: No Product Found!";
+  die;
+ }
+ $sub=getOrderSubtotal($order['HC']);
+ $shipping=getShippingForOrder($order['HC'], "15208");
+ $tax=($sub+$shipping)*.07;
+ $total=$tax+$sub+$shipping;
+ echo money_format("\$%n", $total);
+unload_gc(); ?>

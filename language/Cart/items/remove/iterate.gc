@@ -1,0 +1,37 @@
+require_once('/var/www/sites/GC/common/commercemenu.php');
+ $item=find("order_Product", "HC", auv("Item"));
+ if (is_null($item))$item=find("order_Product", "HC", auv("item"));
+ if (is_null($item)){
+  echo milford()."[[Item quantity]]: No Product Found!";
+  die;
+ }
+ $order=find("Orders", "HC", $item['r_Order']);
+ if (flag($order['flags'], ORDER_COMPLETE){
+  die;
+ }
+ if (isset($_VAR['style']) $style=nq($_VAR['style']);
+ else $style="";
+  if (!isset($_VAR['content'])&&!isset($_VAR['image'])&&!isset($_VAR['rollover'])) {
+   $result="";
+   $call=makejax($result,"http://www.gudagi.com/gc_input/add.php","Product=".$item['HC']."&isAdd=2");
+   echo '<input type="button" name="add" id="add" value="Remove" style="'.$style.'" class="'.nq($_VAR['class']).'" onmousedown="'.$call.'">';
+  } else if (isset($_VAR['content'])){
+   $content=$_VAR['content'];
+   $result="";
+   $call=makejax($result,"http://www.gudagi.com/gc_input/add.php","Product=".$item['HC']."&isAdd=2");
+   echo '<a href="javascript:'.$call.'" style="'.$style.'">'.$content.'</a>';
+  }
+  else if (isset($_VAR['image'])){
+   $link=defaults(comdom($_VAR['link']), $domain.$path);
+   $call=makejax($link,"http://www.gudagi.com/gc_input/add.php","Product=".$item['HC']."&isAdd=2");
+   echo '<a href="javascript:'.$call.'" style="'.$style.'" ><img src="'.$_VAR['image'].'" title="Remove This item!" /></a>';
+  }
+  else if (isset($_VAR['rollover']){ 
+   $rollover=explode(",", $_VAR['rollover']);
+   $link=defaults(comdom($_VAR['link']), $domain.$path);
+   $onmouseover='javascript: document.remove'.$item['HC'].'.src="'.$rollover[1].'"';
+   $onmouseout='javascript: document.remove'.$item['HC'].'.src="'.$rollover[0].'"';
+   $onmousedown='javascript: document.remove'.$item['HC'].'.src="'.$rollover[2].'"';
+   $call=makejax($link,"http://www.gudagi.com/gc_input/add.php","Product=".$item['HC']."&isAdd=2");
+   echo '<a href="javascript:'.$call.'" style="'.$style.'" ><img src="'.$rollover[0].'" name="remove'.$item['HC'].'" title="Remove This item!" onmouseover="'.$onmouseover.'" onmouseout="'.$onmouseout.'" onmousedown="'.$onmousedown.'" /></a>';
+  }

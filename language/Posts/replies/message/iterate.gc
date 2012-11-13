@@ -1,0 +1,27 @@
+ $post=$_OBJ;
+ if ( is_null($post) ) {
+  echo 'No data available.';
+ } else {
+  $poster=find("Auth","r_Contact", $post['r_Poster']);
+  if ( isset($_VAR['markdown']) ) {
+   if ( stripos($_VAR['markdown'],"xtra") != false ) {
+    if ( !function_exists("Markdown") ) require_once '/gc/lib/markdown.php';
+   } else {
+    if ( !function_exists("Markdown") ) require_once '/gc/lib/markdown_extra.php';
+   }
+   echo Markdown($_OBJ['message']);
+  } else
+  if ( isset($_VAR['bbcode']) ) {
+   require_once '/gc/lib/ubb.php';
+   $parser = new ubbParser();
+   $parser->setUsername($poster['username']);
+   $parser->parse($post['content']);
+  }
+  else if ( isset($_VAR['html']) ) {
+   echo $post['content'];  
+  } else {
+   echo strip_tags($post['content']);
+  }
+  unset($poster);
+ }
+ unset($post);

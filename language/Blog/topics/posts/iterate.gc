@@ -1,0 +1,6 @@
+$posts=find_like("Post","r_Topic",$_OBJ['HC']);
+if ( count($posts)>0 ) {
+ foreach ( $posts as $post ) {
+  echo $post['name'];
+ }
+} else echo 'No posts.';

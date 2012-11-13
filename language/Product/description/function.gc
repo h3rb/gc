@@ -1,0 +1,11 @@
+<?php
+require_once("/var/www/sites/GC/common/commercemenu.php");
+ $product=find("Product", "HC", auv("Product"));
+ if (is_null($product))$product=find("Product", "HC", auv("product"));
+ if (is_null($product)&&isset($_VAR['id']))$product=find("Product", "HC", $_VAR['id']);
+ if (is_null($product)){
+  echo milford()."[[Product description]]: No Product Available!";
+  die;
+ }
+ echo $product['description'];
+?>

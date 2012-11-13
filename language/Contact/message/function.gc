@@ -1,0 +1,3 @@
+<?php load_gc();
+ input("contact_message");
+unload_gc(); ?>

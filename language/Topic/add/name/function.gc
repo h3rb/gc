@@ -1,0 +1,3 @@
+<?php load_gc();
+ echo defaults(nq($_VAR['name']),"Name: ").'<input type="text" name="topic_name" id="topic_name" size="'.defaults(nq($_VAR['size']),30).'" placeholder="'.nq($_VAR['placeholder']).'" class="'.nq($_VAR['class']).'" value="'.nq($_VAR['value']).'" style="'.nq($_VAR['style']).'">';
+unload_gc(); ?>

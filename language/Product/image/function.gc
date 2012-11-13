@@ -1,0 +1,15 @@
+<?php load_gc();
+ $product=find("Product", "HC", auv("Product"));
+ if (is_null($product))$product=find("Product", "HC", auv("product"));
+ if (is_null($product)&&isset($_VAR['id']))$product=find("Product", "HC", $_VAR['id']);
+ if (is_null($product)){
+  echo milford()."[[Product image]]: No Product Found!";
+  die;
+ }
+  $depiped=explode("|",$product['images']);
+  if ($depiped[0]!=""){
+	foreach ($depiped as $imgLink){
+ 		echo '<img src="'.$imgLink.'" title="'.$product['name'].'" name="'.$product['HC'].'image" width="'.$_VAR['width'].'" height="'.$_VAR['height'].'" /><br />';
+	}
+  }
+unload_gc(); ?>

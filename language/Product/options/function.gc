@@ -1,0 +1,68 @@
+<?php load_gc();
+ $product=find("Product", "HC", auv("Product"));
+ if (is_null($product))$product=find("Product", "HC", auv("product"));
+ if (is_null($product)){
+  echo milford()."[[Product options]]: No Product Found!";
+  die;
+ }
+  $groups=find_like("Product_option_group","r_Product", $product['HC']);
+        if (!is_null($groups)){
+                foreach ($groups as $group){
+                        if (!flag($groups['flag'], PRODUCT_OPTION_DEPRECIATED)) {
+                                $options=find_like("Product_options", "r_Product_option_group", $group['HC']);
+                                if (!is_null($options)){
+                                        echo '<table>';
+					echo '<tr><th>'.$group['name'].": ".$group['description'];
+					if ($group['price']!="") {echo ' '.money_format("%n",$group['price']);}
+					echo '</th></tr>';
+                                        foreach ($options as $option){
+                                                if ($_VAR['list']=="true"){
+							echo '<tr><td>'.$option['name'].': '.$option['description'].' '.money_format("%n",$option['price']).'</td></tr>';
+						}
+						else if (flag($group['flags'], PRODUCT_OPTION_MULTIPLE)){
+                                                        //checkboxes
+                                                        echo '<tr><td>'.$option['name'].": ".$option['description']." ".money_format("%n",$option['price']+$product['price'])." ".tag( array("input"=>"input",
+                                                                "type"=>"checkbox",
+                                                                "id"=>"group".$group['HC']."option".$option['HC'],
+                                                                "name"=>"group".$group['HC'],
+                                                                "title"=>$option['description'],
+                                                                "value"=>$option['HC'],
+                                                                "style"=>nq($_VAR['style']),
+                                                                "class"=>nq($_VAR['class']),
+                                                                "placeholder"=>nq($_VAR['placeholder'])
+                                                                ),
+                                                                false ).'</td>';
+                                                                if ($option['images']!="") echo '<td><img src="'.$option['images'].'" title="'.$option['description'].'" alt="'.$option['description'].'" width="'.$_VAR['width'].'" height="'.$_VAR['height'].'"/></td>';
+                                                                echo '</tr>';
+                						if ($_VAR['images']=="show"){
+
+								}
+		                                }
+                                                else {
+                                                        //radio buttons
+                                                        echo '<tr><td>'.$option['name'].": ".$option['description']." ".money_format("%n",$option['price']+$product['price'])." ".tag( array("input"=>"input",
+                                                                "type"=>"radio",
+                                                                "id"=>"group".$group['HC']."option".$option['HC'],
+                                                                "name"=>"group".$group['HC'],
+                                                                "title"=>$option['description'],
+                                                                "value"=>$option['HC'],
+                                                                "style"=>nq($_VAR['style']),
+                                                                "class"=>nq($_VAR['class']),
+                                                                "placeholder"=>nq($_VAR['placeholder'])
+                                                                ),
+                                                                false ).'</td>';
+                                                                if ($option['images']!="") echo '<td><img src="'.$option['images'].'" title="'.$option['description'].'" alt="'.$option['description'].'" width="'.$_VAR['width'].'" height="'.$_VAR['width'].'" /></td>';
+                                                                echo '</tr>';
+							if ($_VAR['images']=="show"){
+	
+							}
+						}
+                                        }
+                                        echo '</table><br />';
+                                }
+                        }
+                }
+        }
+  
+
+unload_gc(); ?>

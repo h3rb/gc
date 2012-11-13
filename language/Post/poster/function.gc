@@ -1,0 +1,11 @@
+<?php load_gc();
+ $post=find("Post","HC",auv('Post'));
+ if ( is_null($post) ) $post=find("Post","HC",auv('post'));
+ if ( is_null($post) ) { echo 'unknown'; }
+ else
+ if ( $post['r_Poster'] == "anonymous" ) echo "anonymous";
+ else {
+  $poster=find("Contact","HC",$post['r_Poster']);
+  echo $poster['first_name'] . ' ' . $poster['last_name'];
+ }
+unload_gc(); ?>

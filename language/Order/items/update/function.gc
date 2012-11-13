@@ -1,0 +1,14 @@
+<?php load_gc(); require_once('/var/www/sites/GC/common/commercemenu.php');
+ $item=find("order_Product", "HC", auv("Item"));
+ if (is_null($item))$item=find("order_Product", "HC", auv("item"));
+ if (is_null($item)){
+  echo milford()."[[Item quantity]]: No Product Found!";
+  die;
+ }
+ if (!isset($_VAR['editable'])){
+  echo $item['qty'];
+ }
+ else{
+  echo $item['qty'];//makejax
+ }
+unload_gc(); ?>

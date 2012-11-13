@@ -1,0 +1,29 @@
+<?php load_gc();
+ $product=find("Product", "HC", auv("Product"));
+ if (is_null($product))$product=find("Product", "HC", auv("product"));
+ if (is_null($product)&&isset($_VAR['id']))$product=find("Product", "HC", $_VAR['id']);
+ if (is_null($product)){
+  echo milford()."[[Product carriers]]: No Product Available!";
+  die;
+ }
+ $carriers=explode("|",$product['carriers']);
+ 
+ //if buttons
+  $style="";
+  if (isset($_VAR['style'])) $style=$_VAR['style'];
+  echo '<table id="'.$style.'">';
+  foreach ($carriers as $carrier){
+   echo '<tr><td><input type="radio" name="carrier" id="'.$carrier.'" value="'.$carrier.'" /> '.$carrier;
+   if ($carrier=="UPS"){
+    echo ' <img src="http://www.gudagi.com/fmimages/ups.gif" title="UPS" /><br />';
+   }
+   else if ($carrier=="FedEx"){
+    echo ' <img src="http://www.gudagi.com/fmimages/fedex.gif" title="FedEx" /><br />';
+   }
+   else if ($carrier=="USPS"){
+    echo ' <img src="http://www.gudagi.com/fmimages/usps.gif" title="USPS" /><br />';
+   }
+   echo '</td></tr>';
+  }
+  echo '</table>';
+unload_gc(); ?>

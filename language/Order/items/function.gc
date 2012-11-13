@@ -1,0 +1,14 @@
+<?php load_gc();
+ require_once("/var/www/sites/GC/common/commercemenu.php");
+ $order=find("Orders", "HC", auv("Order"));
+ if (is_null($order))$order=find("Orders", "HC", auv("order"));
+ if (is_null($order)){
+  echo milford()."[[Order number]]: No Product Found!";
+  die;
+ }
+ $orderProducts=table_to_array(find_like("order_Product", "r_Order", $order['HC']));
+ foreach ($orderProducts as $product){
+  $p=getProduct($product['r_Product']);
+  echo '<tr><td>'.$product['qty'].'</td><td>'.$p['name'].'</td><td>'.$p['price'].'</td></tr>';
+ } 
+unload_gc(); ?>

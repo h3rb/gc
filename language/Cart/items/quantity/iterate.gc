@@ -1,0 +1,2 @@
+$cart=find("Cart", HC, $_OBJ['HC']);
+echo $cart['items'];

@@ -1,0 +1,14 @@
+<?php load_gc();
+ $cart=find("Cart", "r_Customer", $user['HC']);
+ if (is_null($cart)) $cart=find("Cart", "r_Customer", $user['HC']);
+ if (is_null($cart)) $cart=find("Cart", "r_Customer", $user['HC']);
+ if (is_null($cart)){
+//  echo milford()."[[Cart checkout]]: No items in cart!";
+  die;
+ }
+ if (isset($_VAR['result'])){
+  $link=defaults(comdom($_VAR['result'],false),$domain.$path);
+  $link=jax($link, "&cart=".$cart['HC']);
+  echo '<a href="'.$link.'">Proceed to Checkout &rarr;</a>';
+ }
+unload_gc(); ?>

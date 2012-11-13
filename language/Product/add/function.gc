@@ -1,0 +1,102 @@
+<?php load_gc();
+ global $store;
+ $product=find("Product","HC",auv("Product"));
+ if ( is_null($product) ) $product=find("Product","HC",auv("product"));
+ if (is_null($product)&&isset($_VAR['id']))$product=find("Product", "HC", $_VAR['id']);
+ if ( is_null($product) ) { echo milford()."[[product add]]: no product found"; die; }
+ if ( isset($_VAR['result']) || isset($_VAR['link']) || isset($_VAR['quantity']) ) {
+   $val=1;
+   if (isset($_VAR['quantity'])) $val=$_VAR['quantity'];
+   echo '<form id="add'.$product['HC'].'" action="">';
+   echo defaults(nq($_VAR['quantity']),'Quantity: ').
+   tag( array("input"=>"input",
+    "type"=>"text",
+    "id"=>"quantity".$product['HC'],
+    "name"=>"quantity",
+    "title"=>"quantity",
+    "value"=>$val,
+    "style"=>nq($_VAR['style']),
+    "class"=>nq($_VAR['class']),
+    "placeholder"=>nq($_VAR['placeholder'])
+    ),
+    false );
+  $q="https://www.gudagi.com/gc_input/add_to_cart.php?isAdd=1&product=".$product['HC']."&store=".auv("store");
+  if ($_VAR['options']=="yes"){
+	$groups=find_like("Product_option_group","r_Product", $product['HC']);
+	if (!is_null($groups)){
+		foreach ($groups as $group){
+			if (!flag($groups['flag'], PRODUCT_OPTION_DEPRECIATED)) {
+				$options=find_like("Product_options", "r_Product_option_group", $group['HC']);
+				if (!is_null($options)){
+					echo '<table><tr><th>'.$group['name'].": ".$group['description']." ".money_format("%n",$group['price']).'</th></tr>';
+					foreach ($options as $option){
+						if (flag($group['flags'], PRODUCT_OPTION_MULTIPLE)){
+							//checkboxes
+							echo '<tr><td>'.$option['name'].": ".$option['description']." ".money_format("%n",$option['price'])." ".tag( array("input"=>"input",
+								"type"=>"checkbox",
+								"id"=>"group".$group['HC']."option".$option['HC'],
+								"name"=>"group".$group['HC'],
+								"title"=>$option['description'],
+								"value"=>$option['HC'],
+								"style"=>nq($_VAR['style']),
+								"class"=>nq($_VAR['class']),
+								"placeholder"=>nq($_VAR['placeholder'])
+								),
+								false ).'</td>';
+								if ($option['images']!="") echo '<td><img src="'.$option['images'].'" title="'.$option['description'].'" alt="'.$option['description'].'" width="'.$_VAR['width'].'" height="'.$_VAR['height'].'" style="'.$_VAR['style'].'" class="'.$_VAR['class'].'" /></td>';
+								echo '</tr>';
+						}
+						else {
+							//radio buttons
+							echo '<tr><td>'.$option['name'].": ".$option['description']." ".money_format("%n",$option['price'])." ".tag( array("input"=>"input",
+								"type"=>"radio",
+								"id"=>"group".$group['HC']."option".$option['HC'],
+								"name"=>"group".$group['HC'],
+								"title"=>$option['description'],
+								"value"=>$option['HC'],
+								"style"=>nq($_VAR['style']),
+								"class"=>nq($_VAR['class']),
+								"placeholder"=>nq($_VAR['placeholder'])
+								),
+								false ).'</td>';
+								if ($option['images']!="") echo '<td><img src="'.$option['images'].'" title="'.$option['description'].'" alt="'.$option['description'].'" width="'.$_VAR['width'].'" height="'.$_VAR['height'].'" style="'.$_VAR['style'].'" class="'.$_VAR['class'].'" /></td>';
+								echo '</tr>';
+						}
+					}
+					echo '</table>';
+				}
+			}
+		}
+	}
+  }
+  if ( isset($_VAR['link']) && isset($_VAR['result']) ) {
+   echo milford().'[[Product add]]: You only need either the <i>link</i> or the <i>result</i> attribute, not both.'; die;
+  }
+  if ( isset($_VAR['link']) ) {
+   $link=defaults(comdom(nq($_VAR['link'])),$domain.$path);
+   $unknown=defaults(comdom(nq($_VAR['unknown'])),$domain.$path);
+   $fail=defaults(comdom(nq($_VAR['fail'])),$domain.$path);
+   $call=makejax(st('pass',$link,'unknown',$unknown,'fail',$fail),$q);
+   if ( !hasjax($link) ) hide("target",$link);
+   href("add",$call,$content);
+  } else
+  if ( isset($_VAR['result']) ) {
+   $content="Add to Cart";
+   $result=defaults(comdom(nq($_VAR['result'])),$domain.$path);
+   $unknown=defaults(comdom(nq($_VAR['unknown'])),$domain.$path);
+   $fail=defaults(comdom(nq($_VAR['fail'])),$domain.$path);
+   $call=makejax(st('pass',$result,'unknown',$unknown,'fail',$fail),$q);
+   if ( !hasjax($result) ) hide("result",$result);
+   button("add",$call,$content);
+  } else {
+   $link=defaults(comdom(nq($_VAR['link'])),$domain.$path);
+   $unknown=defaults(comdom(nq($_VAR['unknown'])),$domain.$path);
+   $fail=defaults(comdom(nq($_VAR['fail'])),$domain.$path);
+   $call=makejax(st('pass',$link,'unknown',$unknown,'fail',$fail),$q);
+   if ( !hasjax($link) ) hide("target",$link);
+   href("add",$call,$content);
+  }
+  hide("last",$domain.$path);
+  echo '</form>';
+ }
+unload_gc(); ?>

@@ -1,0 +1,25 @@
+<?php
+ $q="http://www.gudagi.com/gc_input/login.php?ajax=1";
+ $content=nq($_VAR['content']);
+ if ( strlen($content)<=0 ) $content="Log in";
+ if ( isset($_VAR['link']) && isset($_VAR['target']) ) {
+  echo milford().'[[auth login button]]: You only need either the <i>link</i> or the <i>target</i> attribute, not both.'; die;
+ }
+ if ( isset($_VAR['link']) ) {
+  $link=defaults(comdom(nq($_VAR['link'])),$domain.$path);
+  $unknown=defaults(comdom(nq($_VAR['unknown'])),$domain.$path);
+  $fail=defaults(comdom(nq($_VAR['fail'])),$domain.$path);
+  $call=makejax(st('pass',$link,'unknown',$unknown,'fail',$fail),$q);
+  if ( !hasjax($link) ) hide("target",$link);
+  href( "auth", $call, $content);
+ } else
+ if ( isset($_VAR['target']) ) {
+  $target=defaults(comdom(nq($_VAR['target'])),$domain.$path);
+  $unknown=defaults(comdom(nq($_VAR['unknown'])),$domain.$path);
+  $fail=defaults(comdom(nq($_VAR['fail'])),$domain.$path);
+  $call=makejax(st('pass',$target,'unknown',$unknown,'fail',$fail),$q);
+  if ( !hasjax($target) ) hide("target",$link);
+  button( "auth", $call, $content );
+ }
+ echo '<input type="hidden" name="last" value="'.$domain.$path.'">';
+?>

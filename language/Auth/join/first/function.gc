@@ -1,0 +1,3 @@
+<?php load_gc();
+ input("fname");
+unload_gc(); ?>

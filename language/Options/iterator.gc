@@ -1,0 +1,13 @@
+<?php load_gc();
+//does products have a limit? limit tag.
+ $limit="";
+ if (is_numeric(nq($_VAR['length']))) $limit=" LIMIT ".nq($_VAR['length']);
+ $products=find_like("Product", "r_Supplier", auv("store"), $limit);
+ if (is_null($products)){
+   echo defaults(nq($_VAR['none']), "No products available.");
+ }
+ else{
+  echo iter("Products", $_CODE, $products);
+ }
+ 
+unload_gc(); ?>

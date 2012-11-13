@@ -1,0 +1,1 @@
+if (!flag($_OBJ['flags'], PRODUCT_STOP)) echo $_OBJ['tags'];

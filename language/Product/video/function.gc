@@ -1,0 +1,14 @@
+<?php load_gc();
+ $product=find("Product", "HC", auv("Product"));
+ if (is_null($product))$product=find("Product", "HC", auv("product"));
+ if (is_null($product)&&isset($_VAR['id']))$product=find("Product", "HC", $_VAR['id']);
+ if (is_null($product)){
+  echo milford()."[[Product video]]: No Product Found!";
+  die;
+ }
+ $height=320;
+ $width=240;
+ if (isset($_VAR['width'])) $width=$_VAR['width'];
+ if (isset($_VAR['height'])) $height=$_VAR['height'];
+ echo $product['video_tour'];
+unload_gc(); ?>

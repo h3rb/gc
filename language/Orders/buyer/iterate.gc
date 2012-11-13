@@ -1,0 +1,6 @@
+$buyer=find("Contact", "HC", $_OBJ['r_Buyer']);
+if ( isset($_VAR['link']) ) {
+ $link=defaults(comdom($_VAR['link'],false),$domain.$path);
+ $link=jax($link,"&buyer=".$_OBJ['r_Buyer']);
+ echo '<a href="'.$link.'">'.$buyer['first_name'].' '.$buyer['last_name']'</a>';
+} else echo $buyer['first_name'].' '.$buyer['last_name'];

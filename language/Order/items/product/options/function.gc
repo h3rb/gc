@@ -1,0 +1,10 @@
+<?php load_gc();
+ $product=find("Product", "HC", auv("Product"));
+ if (is_null($product))$product=find("Product", "HC", auv("product"));
+ if (is_null($product)){
+  echo milford()."[[Product options]]: No Product Found!";
+  die;
+ }
+$groupArray=parseOptions($product['options']);
+
+unload_gc(); ?>

@@ -1,0 +1,3 @@
+<?php load_gc();
+ echo defaults(nq($_VAR['description']),"Description: ").'<textarea type="text" name="topic_description" id="topic_description" rows="'.defaults(nq($_VAR['rows']),4).'" cols="'.defaults(nq($_VAR['cols']),40).'" placeholder="'.nq($_VAR['placeholder']).'" class="'.nq($_VAR['class']).'" value="'.nq($_VAR['value']).'" style="'.nq($_VAR['style']).'"></textarea>';
+unload_gc(); ?>

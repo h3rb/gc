@@ -1,0 +1,18 @@
+<?php load_gc();
+ $item=find("order_Product", "HC", auv("Item"));
+ if (is_null($item))$item=find("order_Product", "HC", auv("item"));
+ if (is_null($item)){
+  echo milford()."[[Item product video]]: No item found!";
+  die;
+ }
+ $product=find("Product", "HC", $item['r_Product']);
+ if (is_null($product)){
+  echo milford()."[[Item product video]]: No Product Found!";
+  die;
+ }
+ $height=320;
+ $width=240;
+ if (isset($_VAR['width'])) $width=$_VAR['width'];
+ if (isset($_VAR['height'])) $height=$_VAR['height'];
+ echo $product['video_tour'];
+unload_gc(); ?>
