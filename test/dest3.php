@@ -1,1 +1,0 @@
-<?php echo '<html><head><title>Error</title></head><body>"User name": No such object<br></body></html>'; ?>
