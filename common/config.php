@@ -10,10 +10,10 @@ define(site,'http://www.gudagi.com/');
 define(site_,'http://www.gudagi.com');
 define(domain,'.gudagi.com');
 define(host, "localhost");
-define(db_name, "fullgrow_thebooks");
+define(db_name, "dbname");
 //db_name,"thebooks");
-define(db_pass, "nOECUG2C2i");
-define(db_user, "fullgrow_gudagi");
+define(db_pass, "password");
+define(db_user, "username");
 
 define(timeout, 96000);       // number of seconds until cookie expires
 // chosen db-related data structure sizes
